@@ -28,3 +28,83 @@ try:
 except KeyboardInterrupt:
     GPIO.cleanup()
 ```
+```python
+import Adafruit_SSD1306  # Use the Adafruit library for OLED displays
+import RPi.GPIO as GPIO
+import time
+
+# Raspberry Pi pin configuration
+RST = 24  # Reset pin (optional)
+# Note: You need to connect SDA and SCL pins according to your display module
+
+# Initialize the OLED display
+disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
+disp.begin()
+disp.clear()
+disp.display()
+
+# Text settings
+font_size = 16
+
+try:
+    while True:
+        # Clear the display
+        disp.clear()
+
+        # Write your information
+        disp.draw.text((0, 0), "Helmet Display", font_size=font_size, fill=255)
+        disp.draw.text((0, 20), "Speed: 60 mph", font_size=font_size, fill=255)
+        disp.draw.text((0, 40), "Battery: 90%", font_size=font_size, fill=255)
+
+        # Display the content
+        disp.display()
+
+        time.sleep(1)  # Update the information every second
+
+except KeyboardInterrupt:
+    disp.clear()
+    disp.display()
+```
+
+```python
+import cv2
+import numpy as np
+from time import sleep
+
+# Initialize the camera objects (use the correct camera device IDs)
+camera1 = cv2.VideoCapture(0)  # External camera 1
+camera2 = cv2.VideoCapture(1)  # External camera 2
+
+# Set camera properties (optional)
+camera1.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+camera1.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+camera2.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+camera2.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+# Initialize the helmet screen (you need to configure this based on your screen)
+# Example: helmet_screen = initialize_helmet_screen()
+
+try:
+    while True:
+        # Capture frames from external cameras
+        ret1, frame1 = camera1.read()
+        ret2, frame2 = camera2.read()
+
+        if ret1 and ret2:
+            # Process frames if needed (e.g., resizing or cropping)
+
+            # Combine frames (for a side-by-side view)
+            combined_frame = np.hstack((frame1, frame2))
+
+            # Display the combined frame on the helmet screen
+            # Example: helmet_screen.display(combined_frame)
+
+        sleep(0.1)  # Adjust the delay as needed for your setup
+
+except KeyboardInterrupt:
+    # Release camera objects and clean up
+    camera1.release()
+    camera2.release()
+    # Release the helmet screen (if needed)
+    # Example: helmet_screen.close()
+```
