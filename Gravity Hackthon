@@ -1,0 +1,30 @@
+```python
+import RPi.GPIO as GPIO
+import time
+
+# Setup GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(4, GPIO.IN)  # Connect the pulse sensor output to GPIO pin 4
+
+# Variables
+bpm = 0
+start_time = time.time()
+
+def interrupt_callback(channel):
+    global bpm, start_time
+    bpm += 1
+
+GPIO.add_event_detect(4, GPIO.FALLING, callback=interrupt_callback)
+
+try:
+    while True:
+        if time.time() - start_time >= 60:  # Calculate BPM over 60 seconds
+            bpm = (bpm / 60) * 2  # Multiply by 2 for BPM
+            print(f"Heart rate: {bpm} BPM")
+            start_time = time.time()
+            bpm = 0
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    GPIO.cleanup()
+```
