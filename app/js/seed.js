@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 import * as store from './store.js';
 import { ALL_QUESTIONS } from './model.js';
+import { computeScores } from './scoring.js';
 
 // درجات واقعية متفاوتة لإظهار فجوات ونضج
 const DEMO_SCORES = {
@@ -21,6 +22,17 @@ const DEMO_EVIDENCE = {
 export function seedDemo() {
   store.reset();
   store.createOrg('هيئة الأداء المؤسسي (عرض تجريبي)', 'جهة حكومية');
+
+  // دورة سابقة (قبل 6 أشهر) بدرجات أقل — لبناء منحنى النضج والدلتا
+  store.pushHistoryCycle({
+    name: 'الدورة التمهيدية', completedAt: '2026-02-01', label: 'فبراير',
+    overallScore: 2.1,
+    domains: [
+      { id: 'd1', name: 'التخطيط الاستراتيجي', icon: '🎯', score: 2.3 },
+      { id: 'd2', name: 'مواءمة وقياس الأداء', icon: '📊', score: 2.2 },
+      { id: 'd3', name: 'ثقافة التحسين والتنفيذ', icon: '🔄', score: 1.7 },
+    ],
+  });
   store.createAssessment({
     name: 'تقييم نضج إدارة الاستراتيجية والأداء — الدورة الأولى',
     goal: 'قياس النضج وتحديد أولويات التحسين',
@@ -44,6 +56,15 @@ export function seedDemo() {
     // المراجع يعتمد الدرجة (بعضها بتعديل طفيف للواقعية)
     store.reviewDecision(q.id, 'approve', score, 'مطابق للأدلة.');
   }
+
+  // تسجيل الدورة الحالية في التاريخ (النقطة الثانية للمنحنى)
+  const a = store.getState().assessment;
+  const res = computeScores(a.snapshot, a.responses);
+  store.pushHistoryCycle({
+    name: a.name, completedAt: '2026-08-14', label: 'أغسطس',
+    overallScore: res.overall.score,
+    domains: res.domains.map(d => ({ id: d.id, name: d.name, icon: d.icon, score: d.score })),
+  });
 
   // مبادرة تحسين نموذجية
   store.addAction({

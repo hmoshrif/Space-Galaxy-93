@@ -13,7 +13,7 @@ function load() {
     const raw = localStorage.getItem(KEY);
     if (raw) return JSON.parse(raw);
   } catch (e) { /* تجاهل */ }
-  return { org: null, assessment: null, audit: [] };
+  return { org: null, assessment: null, audit: [], history: [], role: 'org_admin' };
 }
 
 function persist() {
@@ -127,9 +127,21 @@ export function updateAction(id, patch) {
   persist();
 }
 
+// ─── الأدوار ───
+export function setRole(role) { state.role = role; audit('switch_role', { role }); persist(); }
+export function getRole() { return state.role || 'org_admin'; }
+
+// ─── تاريخ الدورات (للمقارنة الزمنية / إعادة القياس) ───
+export function pushHistoryCycle(summary) {
+  state.history = state.history || [];
+  state.history.push({ id: uid('cyc'), ...summary });
+  persist();
+}
+export function getHistory() { return state.history || []; }
+
 // ─── إعادة التعيين (للتجربة) ───
 export function reset() {
-  state = { org: null, assessment: null, audit: [] };
+  state = { org: null, assessment: null, audit: [], history: [], role: 'org_admin' };
   persist();
 }
 

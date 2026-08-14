@@ -3,9 +3,10 @@
 // ═══════════════════════════════════════════════════════════════════════════
 import * as store from './store.js';
 import { DOMAINS, ASSESSMENT_TYPES, EVIDENCE_TYPES, RUBRIC } from './model.js';
-import { computeScores, deriveGaps, label } from './scoring.js';
-import { heatmap, radar, impactEffort, weightBars, maturityColor } from './charts.js';
+import { computeScores, deriveGaps, label, distribution, perceptionGap, domainDetail } from './scoring.js';
+import { heatmap, radar, impactEffort, weightBars, maturityColor, maturityCurve, distBars, gauge } from './charts.js';
 import { seedDemo } from './seed.js';
+import { ROLES, NAV_ITEMS, roleNav, canRole } from './roles.js';
 
 const app = () => document.getElementById('app');
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -16,11 +17,15 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const routes = {
   '': dashboardView, 'setup': setupView, 'assess': assessView,
   'review': reviewView, 'results': resultsView, 'plan': planView, 'audit': auditView,
+  'compare': compareView, 'report': reportView,
 };
 
 function router() {
   const hash = location.hash.replace(/^#\/?/, '');
   const [route, param] = hash.split('/');
+  // حجب الوصول حسب الدور
+  const allowed = roleNav(store.getRole());
+  if (route && !allowed.includes(route) && route !== 'setup') { location.hash = '#/'; return; }
   const view = routes[route] || dashboardView;
   renderShell();
   view(param);
@@ -43,20 +48,21 @@ function renderShell() {
       <div class="brand"><span class="logo">◆</span><b>نضج</b><small>منصة إدارة النضج المؤسسي</small></div>
       <div class="top-right">
         ${a ? `<span class="save-chip" id="saveChip">تم الحفظ ✓</span>` : ''}
+        <label class="role-switch" title="الدور الحالي — لا يرى الجميع الواجهة نفسها">
+          <select id="roleSel" aria-label="الدور">
+            ${Object.entries(ROLES).map(([k, r]) => `<option value="${k}" ${store.getRole() === k ? 'selected' : ''}>${r.icon} ${r.label}</option>`).join('')}
+          </select>
+        </label>
         <button class="btn-ghost" id="themeBtn" title="الوضع الليلي/النهاري">🌓</button>
       </div>
     </header>
     <nav class="nav" aria-label="التنقّل الرئيسي">
-      <a href="#/">لوحة المؤسسة</a>
-      <a href="#/assess">التقييم</a>
-      <a href="#/review">المراجعة والاعتماد</a>
-      <a href="#/results">النتائج</a>
-      <a href="#/plan">خطة التحسين</a>
-      <a href="#/audit">سجل التدقيق</a>
+      ${roleNav(store.getRole()).map(r => `<a href="#/${r}">${NAV_ITEMS[r]}</a>`).join('')}
     </nav>
     <main id="view" class="view">${a ? `<div class="progress-strip"><div class="progress-bar" style="width:${progress}%"></div><span>الإنجاز ${progress}%</span></div>` : ''}</main>
     <footer class="foot">v1 MVP · عربي RTL · WCAG 2.2 AA · تخزين محلي — النسخة الإنتاجية تعمل على Next.js + PostgreSQL متعدد المستأجرين</footer>`;
   $('#themeBtn').onclick = toggleTheme;
+  const rs = $('#roleSel'); if (rs) rs.onchange = () => { store.setRole(rs.value); location.hash = '#/'; router(); };
 }
 
 const viewEl = () => document.getElementById('view');
@@ -319,7 +325,8 @@ function resultsView() {
   const gaps = deriveGaps(a.snapshot, a.responses);
   const o = res.overall;
   setView(`
-    <div class="row-between"><h1>النتائج التنفيذية</h1><button class="btn-sm ghost" id="printBtn">🖨️ تقرير PDF</button></div>
+    <div class="row-between"><h1>النتائج التنفيذية</h1><button class="btn-sm ghost" id="printBtn">📄 التقرير التنفيذي</button></div>
+    ${trustBanner(o)}
     <div class="cards">
       ${stat('الدرجة الإجمالية', label(o.score), maturityColor(o.score))}
       ${stat('مستوى الثقة', label(o.confidence))}
@@ -345,12 +352,54 @@ function resultsView() {
       <section class="card"><h3>مصفوفة الأثر مقابل الجهد</h3>${impactEffort(gaps)}</section>
     </div>
 
-    <section class="card domains-detail"><h3>تفصيل المجالات</h3>
-      ${res.domains.map(d => `<div class="dd-row"><span>${d.icon} ${esc(d.name)}</span>
+    ${perceptionGapSection(a)}
+
+    <section class="card domains-detail"><h3>تفصيل المجالات — اضغط «لماذا؟» لكل مجال</h3>
+      ${a.snapshot.map((snap, i) => {
+    const d = res.domains[i];
+    const counts = distribution(snap.questions, a.responses);
+    const detail = domainDetail(snap, a.responses);
+    return `<details class="dd-item"><summary class="dd-row">
+        <span>${d.icon} ${esc(d.name)}</span>
         <div class="dd-bar"><div style="width:${d.score / 5 * 100}%;background:${maturityColor(d.score)}"></div></div>
-        <b style="color:${maturityColor(d.score)}">${label(d.score)}</b></div>`).join('')}
+        <b style="color:${maturityColor(d.score)}">${label(d.score)}</b>
+        <span class="why-chip">لماذا؟</span></summary>
+        <div class="dd-why">
+          <div class="why-dist"><span class="muted small">توزيع الدرجات (تشتت لا متوسط):</span>${distBars(counts)}</div>
+          <table class="why-table"><tbody>${detail.map(q => `<tr>
+            <td>${esc(q.capability)} <span class="chip type-${q.type} sm">${ASSESSMENT_TYPES[q.type].label}</span></td>
+            <td><b style="color:${maturityColor(q.score || 0)}">${q.score ?? '—'}</b></td>
+            <td class="small muted">${q.evidenceCount} دليل · ملاحظة: ${esc(q.reviewNote || '—')}</td></tr>`).join('')}</tbody></table>
+        </div></details>`;
+  }).join('')}
     </section>`);
-  $('#printBtn').onclick = () => window.print();
+  const pb = $('#printBtn'); if (pb) pb.onclick = () => { location.hash = '#/report'; };
+}
+
+// شريط ثقة النتيجة — أول ما يسأله المدير التنفيذي: هل أثق بهذا الرقم؟
+function trustBanner(o) {
+  const level = o.evidenceCoverage >= 70 && (o.confidence || 0) >= 4 ? 'high'
+    : o.evidenceCoverage >= 40 ? 'mid' : 'low';
+  const txt = { high: 'موثوقية عالية', mid: 'موثوقية متوسطة', low: 'موثوقية محدودة — عزّز الأدلة' }[level];
+  const icon = { high: '🟢', mid: '🟡', low: '🔴' }[level];
+  return `<div class="trust trust-${level}">
+    <span class="trust-icon">${icon}</span>
+    <span class="trust-txt"><b>${txt}.</b> هذه النتيجة مبنية على
+      <b>${o.evidenceCoverage}%</b> من الأسئلة مدعومة بأدلة معتمدة،
+      بمستوى ثقة <b>${label(o.confidence)}/5</b>،
+      و<b>${o.counted}/${o.answerable}</b> سؤالاً معتمَداً من المراجع.</span></div>`;
+}
+
+// قسم فجوة الإدراك مقابل التقييم الموثّق
+function perceptionGapSection(a) {
+  const gaps = perceptionGap(a.snapshot, a.responses).filter(g => g.gap != null);
+  if (!gaps.length) return '';
+  return `<section class="card"><h3>فجوة الإدراك — رأي أصحاب المصلحة مقابل الأدلة</h3>
+    <p class="muted small">فرق موجب = إدراك أعلى من الواقع الموثّق (تفاؤل) · سالب = إدراك أقل (تحفّظ أو ضعف تواصل).</p>
+    ${gaps.map(g => `<div class="pgap-row"><span>${g.icon} ${esc(g.name)}</span>
+      <span class="pgap-vals"><small>إدراك</small> <b>${label(g.perception)}</b> <small>مقابل موثّق</small> <b>${label(g.documented)}</b></span>
+      <span class="pgap-delta ${g.gap > 0 ? 'up' : g.gap < 0 ? 'down' : ''}">${g.gap > 0 ? '▲+' : g.gap < 0 ? '▼' : ''}${Math.abs(g.gap).toFixed(1)}</span></div>`).join('')}
+  </section>`;
 }
 
 // ═══════════════ 6) خطة التحسين (Backlog) ═══════════════
@@ -400,6 +449,92 @@ function auditView() {
     <p class="muted">كل قرار وتعديل واعتماد مُسجَّل — أساس الحوكمة والامتثال.</p>
     <table class="audit"><thead><tr><th>الوقت</th><th>الإجراء</th><th>التفاصيل</th></tr></thead>
     <tbody>${(s.audit || []).slice().reverse().map(e => `<tr><td class="small ltr">${new Date(e.at).toLocaleString('ar-SA')}</td><td><span class="badge sm">${esc(e.action)}</span></td><td class="small">${esc(JSON.stringify(e.detail))}</td></tr>`).join('') || '<tr><td colspan="3" class="muted">لا سجلات</td></tr>'}</tbody></table>`);
+}
+
+// ═══════════════ المقارنة الزمنية (إعادة القياس) ═══════════════
+function compareView() {
+  const s = store.getState();
+  if (!s.assessment) return (location.hash = '#/');
+  const hist = store.getHistory();
+  const points = hist.map(c => ({ label: c.label || c.completedAt, score: c.overallScore }));
+  const prev = hist.length >= 2 ? hist[hist.length - 2] : null;
+  const cur = hist[hist.length - 1];
+  setView(`
+    <h1>المقارنة الزمنية</h1>
+    <p class="muted">قياس التحسّن عبر الدورات — أهم ما يحوّل المنصة من أداة تُستخدم مرة إلى برنامج مستمر.</p>
+    <div class="two-col">
+      <section class="card"><h3>منحنى النضج عبر الزمن</h3>${maturityCurve(points)}
+        ${prev ? `<p class="small">التغيّر الإجمالي: <b class="${cur.overallScore >= prev.overallScore ? 'up' : 'down'}">${cur.overallScore >= prev.overallScore ? '▲+' : '▼'}${Math.abs(cur.overallScore - prev.overallScore).toFixed(1)}</b> منذ «${esc(prev.name)}»</p>` : ''}
+      </section>
+      <section class="card"><h3>الدلتا لكل مجال</h3>
+        ${prev ? `<table class="delta-table"><thead><tr><th>المجال</th><th>${esc(prev.label)}</th><th>${esc(cur.label)}</th><th>التغيّر</th></tr></thead>
+        <tbody>${cur.domains.map(d => {
+    const p = prev.domains.find(x => x.id === d.id);
+    const delta = p ? +(d.score - p.score).toFixed(1) : null;
+    return `<tr><td>${d.icon} ${esc(d.name)}</td><td>${p ? p.score.toFixed(1) : '—'}</td><td><b>${d.score.toFixed(1)}</b></td>
+      <td class="${delta > 0 ? 'up' : delta < 0 ? 'down' : ''}">${delta > 0 ? '▲+' : delta < 0 ? '▼' : ''}${delta != null ? Math.abs(delta).toFixed(1) : '—'}</td></tr>`;
+  }).join('')}</tbody></table>` : '<p class="muted">تتطلب دورتين مكتملتين.</p>'}
+      </section>
+    </div>
+    <section class="card"><h3>سجل الدورات</h3>
+      <table class="delta-table"><thead><tr><th>الدورة</th><th>التاريخ</th><th>الدرجة</th></tr></thead>
+      <tbody>${hist.slice().reverse().map(c => `<tr><td>${esc(c.name)}</td><td class="small ltr">${esc(c.completedAt)}</td><td><b style="color:${maturityColor(c.overallScore)}">${c.overallScore.toFixed(1)}</b></td></tr>`).join('')}</tbody></table>
+    </section>`);
+}
+
+// ═══════════════ التقرير التنفيذي العربي (PDF) ═══════════════
+const recommendationFor = (g) => `توثيق وتطبيق ومراقبة «${g.capability}» مع أدلة معتمدة حتى بلوغ المستوى ${g.target}.`;
+function reportView() {
+  const a = store.getState().assessment; const org = store.getState().org;
+  if (!a) return (location.hash = '#/');
+  const res = computeScores(a.snapshot, a.responses);
+  const gaps = deriveGaps(a.snapshot, a.responses);
+  const o = res.overall;
+  let hijri = '', greg = '';
+  try {
+    hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+    greg = new Intl.DateTimeFormat('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+  } catch (e) { greg = new Date().toISOString().slice(0, 10); }
+  setView(`
+    <div class="report-actions"><button class="btn" id="doPrint">🖨️ طباعة / حفظ PDF</button>
+      <a class="btn ghost" href="#/results">→ رجوع للنتائج</a></div>
+    <article class="report" id="report">
+      <header class="rep-head">
+        <div><span class="rep-logo">◆ نضج</span><h1>التقرير التنفيذي لنضج الاستراتيجية والأداء</h1>
+          <p>${esc(org?.name || '')} · ${esc(a.config.kind || '')}</p></div>
+        <div class="rep-date"><div>${hijri ? hijri + ' هـ' : ''}</div><div>${greg} م</div></div>
+      </header>
+
+      <section class="rep-hero">
+        ${gauge(o.score)}
+        <div class="rep-hero-txt">
+          <p class="rep-verdict">مستوى النضج الإجمالي <b style="color:${maturityColor(o.score)}">${label(o.score)}</b> من 5</p>
+          <p class="muted small">مبني على ${o.evidenceCoverage}% أدلة معتمدة · ثقة ${label(o.confidence)}/5 · ${o.counted}/${o.answerable} سؤالاً معتمَداً</p>
+        </div>
+      </section>
+
+      <section><h2>النضج حسب المجال</h2>
+        <table class="rep-table"><thead><tr><th>المجال</th><th>الدرجة</th><th>الحالة</th></tr></thead>
+        <tbody>${res.domains.map(d => `<tr><td>${d.icon} ${esc(d.name)}</td><td><b>${label(d.score)}</b></td>
+          <td>${d.score >= 4 ? 'ناضج' : d.score >= 3 ? 'مطبّق' : d.score >= 2 ? 'جزئي' : 'ضعيف'}</td></tr>`).join('')}</tbody></table>
+      </section>
+
+      <section><h2>أكبر ${Math.min(5, gaps.length)} فجوات والتوصيات</h2>
+        <table class="rep-table"><thead><tr><th>الفجوة</th><th>الأولوية</th><th>الدرجة</th><th>التوصية</th></tr></thead>
+        <tbody>${gaps.slice(0, 5).map(g => `<tr><td><b>${esc(g.capability)}</b><br><span class="muted small">${esc(g.domainName)}</span></td>
+          <td><span class="prio prio-${g.priority}">${g.priority}</span></td><td>${g.score} → ${g.target}</td>
+          <td class="small">${esc(recommendationFor(g))}</td></tr>`).join('') || '<tr><td colspan="4">لا فجوات</td></tr>'}</tbody></table>
+      </section>
+
+      <section><h2>ملخص خطة التحسين</h2>
+        ${(a.actions || []).length ? `<table class="rep-table"><thead><tr><th>المبادرة</th><th>المسؤول</th><th>الموعد</th><th>الحالة</th></tr></thead>
+        <tbody>${a.actions.map(ac => `<tr><td>${esc(ac.title)}</td><td>${esc(ac.owner || '—')}</td><td>${esc(ac.due || '—')}</td><td>${esc(ac.status)}</td></tr>`).join('')}</tbody></table>`
+      : '<p class="muted">لم تُنشأ مبادرات بعد.</p>'}
+      </section>
+
+      <footer class="rep-foot">أُنشئ عبر منصة «نضج» · النموذج ${esc(a.modelVersion)} · المعادلة ${esc(a.scoringVersion)} · وثيقة سرية للاستخدام الداخلي</footer>
+    </article>`);
+  $('#doPrint').onclick = () => window.print();
 }
 
 // ─── الوضع الليلي ───

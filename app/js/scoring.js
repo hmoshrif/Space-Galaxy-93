@@ -95,3 +95,42 @@ export function deriveGaps(snapshotDomains, responses, threshold = 3) {
 }
 
 export const label = (n) => n == null ? '—' : n.toFixed(1);
+
+// توزيع الدرجات داخل مجاٍل (لإظهار التشتت لا المتوسط فقط)
+export function distribution(questions, responses) {
+  const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  for (const q of questions) {
+    const r = responses[q.id];
+    if (isCounted(r)) counts[r.finalScore]++;
+  }
+  return counts;
+}
+
+// فجوة الإدراك: متوسط أسئلة الإدراك مقابل متوسط الأدلة/التطبيق داخل المجال
+export function perceptionGap(snapshotDomains, responses) {
+  return snapshotDomains.map(d => {
+    const avg = (types) => {
+      const qs = d.questions.filter(q => types.includes(q.type) && isCounted(responses[q.id]));
+      if (!qs.length) return null;
+      return round1(qs.reduce((s, q) => s + responses[q.id].finalScore, 0) / qs.length);
+    };
+    const perception = avg(['perception']);
+    const documented = avg(['documentation', 'application', 'results']);
+    return {
+      id: d.id, name: d.name, icon: d.icon, perception, documented,
+      gap: (perception != null && documented != null) ? round1(perception - documented) : null,
+    };
+  });
+}
+
+// تفصيل مجاٍل: كل سؤال بدرجته وأدلته وملاحظة المراجع (تفسير «لماذا هذه الدرجة؟»)
+export function domainDetail(domain, responses) {
+  return domain.questions.map(q => {
+    const r = responses[q.id] || {};
+    return {
+      capability: q.capability, text: q.text, type: q.type,
+      score: r.finalScore ?? null, evidenceCount: (r.evidence || []).length,
+      reviewNote: r.reviewNote || '', confidence: r.confidence ?? null,
+    };
+  });
+}

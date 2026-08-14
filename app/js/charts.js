@@ -78,6 +78,45 @@ export function impactEffort(gaps) {
   </svg>`;
 }
 
+// منحنى النضج عبر الزمن (دورات متعددة)
+export function maturityCurve(points, max = 5) {
+  if (points.length < 2) return '<p class="muted small">تتطلب دورتين على الأقل — أعد التقييم لبناء المنحنى.</p>';
+  const W = 340, H = 200, pad = 34;
+  const x = (i) => pad + i / (points.length - 1) * (W - pad * 2);
+  const y = (v) => H - pad - (v / max) * (H - pad * 2);
+  const line = points.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.score).toFixed(1)}`).join(' ');
+  const dots = points.map((p, i) => `<g><circle cx="${x(i).toFixed(1)}" cy="${y(p.score).toFixed(1)}" r="5" fill="${maturityColor(p.score)}"/>
+    <text x="${x(i).toFixed(0)}" y="${(y(p.score) - 12).toFixed(0)}" class="axis-lbl" text-anchor="middle">${p.score.toFixed(1)}</text>
+    <text x="${x(i).toFixed(0)}" y="${H - pad + 18}" class="axis-lbl" text-anchor="middle">${p.label}</text></g>`).join('');
+  let grid = '';
+  for (let g = 1; g <= max; g++) grid += `<line x1="${pad}" y1="${y(g).toFixed(1)}" x2="${W - pad}" y2="${y(g).toFixed(1)}" class="radar-ring"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="curve" role="img" aria-label="منحنى النضج عبر الزمن">
+    ${grid}<path d="${line}" fill="none" stroke="var(--brand)" stroke-width="2.5"/>${dots}</svg>`;
+}
+
+// أشرطة توزيع الدرجات 1..5
+export function distBars(counts) {
+  const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
+  return `<div class="dist">${[1, 2, 3, 4, 5].map(l => {
+    const c = counts[l]; const pct = (c / total * 100).toFixed(0);
+    return `<div class="dist-col" title="المستوى ${l}: ${c}">
+      <div class="dist-bar" style="height:${Math.max(c ? 14 : 3, c / total * 60)}px;background:${maturityColor(l)}"></div>
+      <span class="dist-lbl">${l}</span><span class="dist-c">${c || ''}</span></div>`;
+  }).join('')}</div>`;
+}
+
+// مقياس نصف دائري للتقرير التنفيذي
+export function gauge(score, max = 5) {
+  const pct = score / max; const angle = Math.PI * (1 - pct);
+  const cx = 110, cy = 110, r = 90;
+  const ex = cx + r * Math.cos(angle), ey = cy - r * Math.sin(angle);
+  return `<svg viewBox="0 0 220 130" class="gauge" role="img" aria-label="درجة النضج ${score}">
+    <path d="M20,110 A90,90 0 0,1 200,110" fill="none" stroke="var(--surface-2)" stroke-width="16" stroke-linecap="round"/>
+    <path d="M20,110 A90,90 0 0,1 ${ex.toFixed(1)},${ey.toFixed(1)}" fill="none" stroke="${maturityColor(score)}" stroke-width="16" stroke-linecap="round"/>
+    <text x="110" y="100" text-anchor="middle" class="gauge-val" fill="${maturityColor(score)}">${score.toFixed(1)}</text>
+    <text x="110" y="122" text-anchor="middle" class="axis-lbl">من 5</text></svg>`;
+}
+
 // أشرطة أوزان الأنواع (شفافية الحساب)
 export function weightBars(weights, breakdown, typeMeta) {
   return Object.entries(weights).map(([k, w]) => {
