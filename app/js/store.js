@@ -57,6 +57,8 @@ export function createAssessment(config) {
     responses: {},                           // questionId -> response
     createdAt: new Date().toISOString(),
     status: 'in_progress',
+    surveyToken: uid('srv'),                 // رمز مشاركة استبيان الإدراك المجهول
+    perceptionSubmissions: [],               // ردود مجهولة (بلا هوية)
   };
   audit('create_assessment', { name: config.name, modelVersion: MODEL_VERSION });
   persist();
@@ -125,6 +127,32 @@ export function updateAction(id, patch) {
   Object.assign(it, patch);
   audit('update_action', { id, patch });
   persist();
+}
+
+// ─── استبيان الإدراك المجهول ───
+export function findAssessmentByToken(token) {
+  const a = state.assessment;
+  return a && a.surveyToken === token ? a : null;
+}
+// حفظ رد مجهول (لا هوية، لا IP) — { answers: {qId: score} }
+export function submitPerception(token, answers) {
+  const a = findAssessmentByToken(token); if (!a) return false;
+  a.perceptionSubmissions = a.perceptionSubmissions || [];
+  a.perceptionSubmissions.push({ answers, at: new Date().toISOString() });
+  audit('perception_submit', { count: a.perceptionSubmissions.length }); // بلا محتوى الردود
+  persist();
+  return true;
+}
+export function perceptionCount() {
+  return (state.assessment?.perceptionSubmissions || []).length;
+}
+// كشف الدليل المكرر عبر البصمة داخل التقييم كاملاً
+export function findDuplicateEvidence(sha) {
+  const a = state.assessment; if (!a || !sha) return null;
+  for (const r of Object.values(a.responses)) {
+    for (const ev of (r.evidence || [])) if (ev.sha === sha) return ev;
+  }
+  return null;
 }
 
 // ─── الأدوار ───

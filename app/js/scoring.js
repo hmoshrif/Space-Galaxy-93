@@ -106,18 +106,34 @@ export function distribution(questions, responses) {
   return counts;
 }
 
-// فجوة الإدراك: متوسط أسئلة الإدراك مقابل متوسط الأدلة/التطبيق داخل المجال
-export function perceptionGap(snapshotDomains, responses) {
+// فجوة الإدراك: إدراك أصحاب المصلحة (من الاستبيان المجهول إن وُجد، وإلا من إجابات الإدراك)
+// مقابل متوسط الأدلة/التطبيق/النتائج الموثّق داخل المجال.
+export function perceptionGap(snapshotDomains, responses, submissions = []) {
+  const n = submissions.length;
   return snapshotDomains.map(d => {
-    const avg = (types) => {
-      const qs = d.questions.filter(q => types.includes(q.type) && isCounted(responses[q.id]));
+    const documentedAvg = () => {
+      const qs = d.questions.filter(q => ['documentation', 'application', 'results'].includes(q.type) && isCounted(responses[q.id]));
       if (!qs.length) return null;
       return round1(qs.reduce((s, q) => s + responses[q.id].finalScore, 0) / qs.length);
     };
-    const perception = avg(['perception']);
-    const documented = avg(['documentation', 'application', 'results']);
+    const perceptionQs = d.questions.filter(q => q.type === 'perception');
+    let perception = null;
+    if (n && perceptionQs.length) {
+      // متوسط الردود المجهولة عبر أسئلة الإدراك في المجال
+      let sum = 0, c = 0;
+      for (const sub of submissions) for (const q of perceptionQs) {
+        const v = sub.answers?.[q.id];
+        if (typeof v === 'number') { sum += v; c++; }
+      }
+      perception = c ? round1(sum / c) : null;
+    } else {
+      const qs = perceptionQs.filter(q => isCounted(responses[q.id]));
+      perception = qs.length ? round1(qs.reduce((s, q) => s + responses[q.id].finalScore, 0) / qs.length) : null;
+    }
+    const documented = documentedAvg();
     return {
-      id: d.id, name: d.name, icon: d.icon, perception, documented,
+      id: d.id, name: d.name, icon: d.icon, perception, documented, sampleSize: n,
+      source: n ? 'استبيان مجهول' : 'تقييم ذاتي',
       gap: (perception != null && documented != null) ? round1(perception - documented) : null,
     };
   });

@@ -7,6 +7,30 @@ import { computeScores, deriveGaps, label, distribution, perceptionGap, domainDe
 import { heatmap, radar, impactEffort, weightBars, maturityColor, maturityCurve, distBars, gauge } from './charts.js';
 import { seedDemo } from './seed.js';
 import { ROLES, NAV_ITEMS, roleNav, canRole } from './roles.js';
+import { sha256, fmtBytes, readFile, readDataUrl, isImage, isExpired, todayISO, MAX_EVIDENCE_BYTES } from './util.js';
+
+// ─── إشعارات Toast + إعلان لقارئ الشاشة (aria-live) ───
+function toast(msg, type = 'ok', ms = 3000) {
+  const wrap = document.getElementById('toast-wrap'); if (!wrap) return;
+  const el = document.createElement('div');
+  el.className = `toast ${type}`; el.textContent = msg; el.setAttribute('role', 'status');
+  wrap.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 250); }, ms);
+}
+function announce(msg) {
+  const live = document.getElementById('a11y-live'); if (live) { live.textContent = ''; setTimeout(() => live.textContent = msg, 30); }
+}
+// تفعيل مؤشّر الخطأ البصري بعد لمس الحقل (WCAG — تجنّب وصم الحقول قبل التفاعل)
+function attachValidation(form) {
+  if (!form) return;
+  form.querySelectorAll('input,select,textarea').forEach(el =>
+    el.addEventListener('blur', () => el.setAttribute('data-touched', '')));
+}
+// هيكل تحميل (skeleton) لتحسين الإحساس بالأداء
+function skeletonBlock() {
+  return `<div class="sk-cards">${'<div class="skeleton"></div>'.repeat(4)}</div>
+    <div class="skeleton sk-row"></div><div class="skeleton sk-row"></div>`;
+}
 
 const app = () => document.getElementById('app');
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -23,14 +47,28 @@ const routes = {
 function router() {
   const hash = location.hash.replace(/^#\/?/, '');
   const [route, param] = hash.split('/');
+  // استبيان الإدراك المجهول: مسار مستقل بلا شِل ولا تسجيل دخول
+  if (route === 'survey') { app().innerHTML = ''; try { surveyView(param); } catch (e) { showError(e); } return; }
   // حجب الوصول حسب الدور
   const allowed = roleNav(store.getRole());
   if (route && !allowed.includes(route) && route !== 'setup') { location.hash = '#/'; return; }
   const view = routes[route] || dashboardView;
   renderShell();
-  view(param);
+  try { view(param); } catch (e) { showError(e); }
   markActiveNav(route);
   window.scrollTo(0, 0);
+  // إدارة التركيز: انقل التركيز إلى المحتوى الرئيسي عند تغيّر الشاشة
+  const v = viewEl(); if (v) { v.setAttribute('tabindex', '-1'); v.focus({ preventScroll: true }); }
+}
+
+// حدود الخطأ — صفحة خطأ مصمّمة بدل شاشة بيضاء
+function showError(e) {
+  console.error(e);
+  const v = viewEl() || app();
+  v.innerHTML = `<div class="page"><div class="state-box">
+    <span class="state-icon">⚠️</span><h3>حدث خطأ غير متوقع</h3>
+    <p>${esc(e?.message || 'خطأ غير معروف')}</p>
+    <a class="btn" href="#/">العودة للوحة المؤسسة</a></div></div>`;
 }
 
 function markActiveNav(route) {
@@ -59,7 +97,7 @@ function renderShell() {
     <nav class="nav" aria-label="التنقّل الرئيسي">
       ${roleNav(store.getRole()).map(r => `<a href="#/${r}">${NAV_ITEMS[r]}</a>`).join('')}
     </nav>
-    <main id="view" class="view">${a ? `<div class="progress-strip"><div class="progress-bar" style="width:${progress}%"></div><span>الإنجاز ${progress}%</span></div>` : ''}</main>
+    <main id="view" tabindex="-1" class="view">${a ? `<div class="progress-strip"><div class="progress-bar" style="width:${progress}%"></div><span>الإنجاز ${progress}%</span></div>` : ''}</main>
     <footer class="foot">v1 MVP · عربي RTL · WCAG 2.2 AA · تخزين محلي — النسخة الإنتاجية تعمل على Next.js + PostgreSQL متعدد المستأجرين</footer>`;
   $('#themeBtn').onclick = toggleTheme;
   const rs = $('#roleSel'); if (rs) rs.onchange = () => { store.setRole(rs.value); location.hash = '#/'; router(); };
@@ -89,7 +127,7 @@ function dashboardView() {
         ${a ? `<a class="btn" href="#/results">عرض النتائج</a>` : `<a class="btn" href="#/setup">إنشاء تقييم</a>`}
       </div>
     </div>
-    ${a ? assessmentCard(a) : `<div class="empty">لا يوجد تقييم بعد. <a href="#/setup">ابدأ الآن ←</a></div>`}
+    ${a ? assessmentCard(a) : `<div class="state-box"><span class="state-icon">📋</span><h3>لا يوجد تقييم بعد</h3><p>ابدأ بإنشاء تقييم نضج عبر معالج قصير.</p><a class="btn" href="#/setup">إنشاء تقييم ←</a></div>`}
     <section class="loop-diagram">
       <h3>دورة القيمة</h3>
       <div class="loop">
@@ -140,13 +178,19 @@ function onboardingView() {
         </div>
       </form>
     </div>`);
+  attachValidation($('#orgForm'));
   $('#orgForm').onsubmit = (e) => {
     e.preventDefault();
     const f = new FormData(e.target);
     store.createOrg(f.get('name'), f.get('sector'));
+    toast('أُنشئت المؤسسة.', 'ok');
     location.hash = '#/setup';
   };
-  $('#demoBtn').onclick = () => { seedDemo(); location.hash = '#/results'; };
+  $('#demoBtn').onclick = () => {
+    viewEl().innerHTML = skeletonBlock();
+    announce('جارٍ تحميل العرض التجريبي');
+    setTimeout(() => { seedDemo(); location.hash = '#/results'; }, 450);
+  };
 }
 
 // ═══════════════ 2) إعداد التقييم (معالج) ═══════════════
@@ -172,10 +216,16 @@ function setupView() {
       <div class="note-box">النموذج: <b>3 مجالات</b> · <b>${DOMAINS.flatMap(d => d.questions).length} سؤالاً</b> · سيُجمَّد Snapshot ثابت عند الإطلاق.</div>
       <button class="btn" type="submit">إطلاق التقييم →</button>
     </form>`);
+  attachValidation($('#setupForm'));
   $('#setupForm').onsubmit = (e) => {
     e.preventDefault();
     const cfg = Object.fromEntries(new FormData(e.target));
+    if (cfg.targetDate && cfg.targetDate < todayISO()) {
+      toast('التاريخ المستهدف يجب أن يكون في المستقبل.', 'err');
+      e.target.targetDate.focus(); return;
+    }
     store.createAssessment(cfg);
+    toast('أُطلق التقييم — النموذج مُجمّد.', 'ok');
     location.hash = '#/assess';
   };
 }
@@ -230,13 +280,22 @@ function assessView() {
 
         <div class="evidence-box">
           <div class="row-between"><b>الأدلة (${(r.evidence || []).length})</b></div>
-          <ul class="ev-list">${(r.evidence || []).map(ev => `<li><b>${esc(ev.title)}</b> <span class="badge sm">${esc(ev.type)}</span> <span class="muted small">${esc(ev.owner || '')} · ${esc(ev.date || '')}</span></li>`).join('') || '<li class="muted small">لا أدلة بعد</li>'}</ul>
-          <button class="btn-sm ghost" id="addEvBtn">+ إضافة دليل</button>
+          <ul class="ev-list">${(r.evidence || []).map(ev => `<li>
+            ${ev.thumb ? `<img class="ev-thumb" src="${ev.thumb}" alt="">` : ''}
+            <b>${esc(ev.title)}</b> <span class="badge sm">${esc(ev.type)}</span>
+            <span class="muted small">${esc(ev.owner || '')} · ${esc(ev.date || '')}${ev.size ? ' · ' + fmtBytes(ev.size) : ''}</span>
+            <span class="ev-badges">${isExpired(ev.validUntil) ? '<span class="ev-badge-exp">منتهي الصلاحية</span>' : ''}${ev.duplicate ? '<span class="ev-badge-dup">مكرر</span>' : ''}</span>
+          </li>`).join('') || '<li class="muted small">لا أدلة بعد</li>'}</ul>
+          <button class="btn-sm ghost" id="addEvBtn" aria-expanded="false">+ إضافة دليل</button>
           <div id="evForm" class="ev-form" hidden>
-            <input id="evTitle" placeholder="عنوان الدليل">
-            <select id="evType">${EVIDENCE_TYPES.map(t => `<option>${t}</option>`).join('')}</select>
-            <input id="evOwner" placeholder="مالك الدليل">
-            <input id="evDate" type="date">
+            <input id="evTitle" placeholder="عنوان الدليل" aria-label="عنوان الدليل">
+            <select id="evType" aria-label="نوع الدليل">${EVIDENCE_TYPES.map(t => `<option>${t}</option>`).join('')}</select>
+            <input id="evOwner" placeholder="مالك الدليل" aria-label="مالك الدليل">
+            <input id="evDate" type="date" aria-label="تاريخ الدليل" title="تاريخ الدليل">
+            <input id="evValid" type="date" aria-label="صالح حتى" title="صالح حتى (لكشف انتهاء الصلاحية)">
+            <label class="file-drop" id="fileDrop" for="evFile">📎 اختر ملف الدليل أو أفلته هنا (حتى 2 م.ب)
+              <input id="evFile" type="file" hidden></label>
+            <div id="evPreview"></div>
             <button class="btn-sm" id="evSave">حفظ الدليل</button>
           </div>
         </div>
@@ -257,16 +316,47 @@ function assessView() {
     store.saveResponse(q.id, { proposedScore: v === 'na' || v === 'dk' ? v : +v });
     flashSave(); assessRerender();
   });
-  $('#addEvBtn').onclick = () => { $('#evForm').hidden = !$('#evForm').hidden; };
+  const addBtn = $('#addEvBtn');
+  addBtn.onclick = () => { const f = $('#evForm'); f.hidden = !f.hidden; addBtn.setAttribute('aria-expanded', String(!f.hidden)); };
+
+  let pending = null; // بيانات الملف المُحضَّرة
+  const fileInput = $('#evFile'), drop = $('#fileDrop'), prev = $('#evPreview');
+  async function handleFile(file) {
+    if (!file) return;
+    if (file.size > MAX_EVIDENCE_BYTES) { toast('حجم الملف يتجاوز 2 م.ب — استخدم رابط نظام بدلاً منه.', 'warn'); return; }
+    const buf = await readFile(file);
+    const sha = await sha256(buf);
+    const dup = store.findDuplicateEvidence(sha);
+    const thumb = isImage(file.type) ? await readDataUrl(file) : null;
+    pending = { fileName: file.name, size: file.size, fileType: file.type, sha, thumb, duplicate: !!dup };
+    if (!$('#evTitle').value.trim()) $('#evTitle').value = file.name;
+    prev.innerHTML = `<div class="ev-preview">
+      <span class="ev-thumb">${thumb ? `<img class="ev-thumb" src="${thumb}" alt="">` : '📄'}</span>
+      <div><b>${esc(file.name)}</b> <span class="muted small">${fmtBytes(file.size)}</span>
+        <div class="ev-badges">${dup ? `<span class="ev-badge-dup">دليل مكرر — مستخدم في «${esc(dup.title)}»</span>` : '<span class="badge sm">بصمة فريدة ✓</span>'}</div>
+      </div></div>`;
+    if (dup) toast('تنبيه: هذا الملف مطابق لدليل موجود (بصمة SHA-256).', 'warn');
+  }
+  fileInput.onchange = () => handleFile(fileInput.files[0]);
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('drag'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); });
+
   $('#evSave').onclick = () => {
-    const title = $('#evTitle').value.trim(); if (!title) return;
-    store.addEvidence(q.id, { title, type: $('#evType').value, owner: $('#evOwner').value, date: $('#evDate').value });
-    flashSave(); assessRerender();
+    const title = $('#evTitle').value.trim();
+    if (!title) { toast('أدخل عنوان الدليل.', 'err'); $('#evTitle').focus(); return; }
+    store.addEvidence(q.id, {
+      title, type: $('#evType').value, owner: $('#evOwner').value,
+      date: $('#evDate').value, validUntil: $('#evValid').value,
+      ...(pending || {}),
+    });
+    toast('أُضيف الدليل.', 'ok'); announce('تمت إضافة الدليل');
+    pending = null; assessRerender();
   };
   $('#prevBtn').onclick = () => { autosave(q.id); currentQ = questions[idx - 1].id; assessRerender(); };
   $('#nextBtn').onclick = () => { autosave(q.id); if (idx < questions.length - 1) { currentQ = questions[idx + 1].id; assessRerender(); } else location.hash = '#/review'; };
   $('#laterBtn').onclick = () => { autosave(q.id); location.hash = '#/'; };
-  const sub = $('#submitBtn'); if (sub) sub.onclick = () => { autosave(q.id); store.submitForReview(q.id); flashSave(); location.hash = '#/review'; };
+  const sub = $('#submitBtn'); if (sub) sub.onclick = () => { autosave(q.id); store.submitForReview(q.id); toast('قُدّمت الإجابة للمراجعة.', 'ok'); location.hash = '#/review'; };
 }
 
 function autosave(qId) {
@@ -311,9 +401,9 @@ function reviewView() {
     </div>`);
   $$('[data-approve]').forEach(b => b.onclick = () => {
     const id = b.dataset.approve; const fs = $(`#fs_${id}`).value;
-    store.reviewDecision(id, 'approve', fs ? +fs : undefined, 'معتمَد.'); reviewView2();
+    store.reviewDecision(id, 'approve', fs ? +fs : undefined, 'معتمَد.'); toast('اعتُمدت الدرجة.', 'ok'); reviewView2();
   });
-  $$('[data-return]').forEach(b => b.onclick = () => { store.reviewDecision(b.dataset.return, 'return', null, 'يحتاج دليلاً إضافياً.'); reviewView2(); });
+  $$('[data-return]').forEach(b => b.onclick = () => { store.reviewDecision(b.dataset.return, 'return', null, 'يحتاج دليلاً إضافياً.'); toast('أُعيدت الإجابة للمقيّم.', 'warn'); reviewView2(); });
 }
 function reviewView2() { viewEl().innerHTML = ''; renderShellStrip(); reviewView(); }
 
@@ -374,6 +464,7 @@ function resultsView() {
   }).join('')}
     </section>`);
   const pb = $('#printBtn'); if (pb) pb.onclick = () => { location.hash = '#/report'; };
+  wireShareSurvey(a);
 }
 
 // شريط ثقة النتيجة — أول ما يسأله المدير التنفيذي: هل أثق بهذا الرقم؟
@@ -392,14 +483,38 @@ function trustBanner(o) {
 
 // قسم فجوة الإدراك مقابل التقييم الموثّق
 function perceptionGapSection(a) {
-  const gaps = perceptionGap(a.snapshot, a.responses).filter(g => g.gap != null);
+  const subs = a.perceptionSubmissions || [];
+  const gaps = perceptionGap(a.snapshot, a.responses, subs).filter(g => g.gap != null);
   if (!gaps.length) return '';
-  return `<section class="card"><h3>فجوة الإدراك — رأي أصحاب المصلحة مقابل الأدلة</h3>
+  const src = subs.length ? `استبيان مجهول · ${subs.length} مشارك` : 'تقييم ذاتي (لم يُشارَك الاستبيان بعد)';
+  return `<section class="card"><div class="row-between"><h3>فجوة الإدراك — رأي أصحاب المصلحة مقابل الأدلة</h3>
+      <span class="badge sm">${src}</span></div>
     <p class="muted small">فرق موجب = إدراك أعلى من الواقع الموثّق (تفاؤل) · سالب = إدراك أقل (تحفّظ أو ضعف تواصل).</p>
     ${gaps.map(g => `<div class="pgap-row"><span>${g.icon} ${esc(g.name)}</span>
       <span class="pgap-vals"><small>إدراك</small> <b>${label(g.perception)}</b> <small>مقابل موثّق</small> <b>${label(g.documented)}</b></span>
       <span class="pgap-delta ${g.gap > 0 ? 'up' : g.gap < 0 ? 'down' : ''}">${g.gap > 0 ? '▲+' : g.gap < 0 ? '▼' : ''}${Math.abs(g.gap).toFixed(1)}</span></div>`).join('')}
+    <button class="btn-sm ghost" id="shareSurveyBtn" style="margin-top:12px">🔗 مشاركة استبيان الإدراك المجهول</button>
+    <div id="shareBox"></div>
   </section>`;
+}
+
+// رابط مشاركة الاستبيان (سري، بلا هوية)
+function surveyLink(a) {
+  return `${location.origin}${location.pathname}#/survey/${a.surveyToken}`;
+}
+function wireShareSurvey(a) {
+  const btn = document.getElementById('shareSurveyBtn'); if (!btn) return;
+  btn.onclick = () => {
+    const box = document.getElementById('shareBox');
+    const link = surveyLink(a);
+    box.innerHTML = `<div class="share-box"><input readonly value="${esc(link)}" aria-label="رابط الاستبيان" id="shareInput">
+      <button class="btn-sm" id="copyLink">نسخ</button></div>
+      <p class="muted small">شارك هذا الرابط مع الموظفين — ردودهم مجهولة تماماً وتُجمَّع تلقائياً.</p>`;
+    document.getElementById('copyLink').onclick = async () => {
+      try { await navigator.clipboard.writeText(link); toast('نُسخ الرابط.', 'ok'); }
+      catch (e) { document.getElementById('shareInput').select(); toast('حدد الرابط وانسخه يدوياً.', 'warn'); }
+    };
+  };
 }
 
 // ═══════════════ 6) خطة التحسين (Backlog) ═══════════════
@@ -436,9 +551,9 @@ function planView() {
       title: `معالجة فجوة: ${g.capability}`, gapCapability: g.capability, priority: g.priority,
       owner: '', due: '', kpi: `رفع درجة «${g.capability}» إلى ${g.target}`, evidenceRequired: 'دليل معتمد',
     });
-    planView2();
+    toast('حُوّلت الفجوة إلى مبادرة.', 'ok'); planView2();
   });
-  $$('.status-sel').forEach(s => s.onchange = () => { store.updateAction(s.dataset.act, { status: s.value }); });
+  $$('.status-sel').forEach(s => s.onchange = () => { store.updateAction(s.dataset.act, { status: s.value }); toast('حُدّثت حالة المبادرة.', 'ok'); });
 }
 function planView2() { viewEl().innerHTML = ''; renderShellStrip(); planView(); }
 
@@ -535,6 +650,47 @@ function reportView() {
       <footer class="rep-foot">أُنشئ عبر منصة «نضج» · النموذج ${esc(a.modelVersion)} · المعادلة ${esc(a.scoringVersion)} · وثيقة سرية للاستخدام الداخلي</footer>
     </article>`);
   $('#doPrint').onclick = () => window.print();
+}
+
+// ═══════════════ استبيان الإدراك المجهول (مسار عام مستقل) ═══════════════
+function surveyView(token) {
+  const a = store.findAssessmentByToken(token);
+  const root = app();
+  if (!a) {
+    root.innerHTML = `<div class="survey"><div class="state-box"><span class="state-icon">🔗</span>
+      <h3>رابط غير صالح</h3><p>انتهت صلاحية الاستبيان أو الرابط غير صحيح.</p></div></div>`;
+    return;
+  }
+  const pQs = a.snapshot.flatMap(d => d.questions.filter(q => q.type === 'perception').map(q => ({ ...q, domain: d.name })));
+  root.innerHTML = `<div class="survey">
+    <div class="brand" style="justify-content:center;margin-bottom:8px"><span class="logo">◆</span><b>نضج</b></div>
+    <h1 style="text-align:center">استبيان الإدراك</h1>
+    <div class="survey-note">🔒 ردودك <b>مجهولة تماماً</b> — لا نجمع اسمك أو بريدك. الهدف قياس الإدراك المؤسسي بصدق. (${esc(a.config.confidentiality || 'سري')})</div>
+    <form id="surveyForm">
+      ${pQs.map((q, i) => `<div class="survey-q"><b>${i + 1}. ${esc(q.text)}</b>
+        <span class="muted small"> (${esc(q.domain)})</span>
+        <div class="survey-scale" role="radiogroup" aria-label="الدرجة">
+          ${[1, 2, 3, 4, 5].map(l => `<label class="score-btn" style="cursor:pointer"><input type="radio" name="${q.id}" value="${l}" class="sr-only" required>${l}</label>`).join('')}
+        </div></div>`).join('')}
+      <button class="btn" type="submit" style="width:100%">إرسال (مجهول)</button>
+    </form></div>`;
+  // تفعيل مظهر الاختيار
+  root.querySelectorAll('.survey-scale label').forEach(lbl => {
+    lbl.addEventListener('click', () => {
+      const group = lbl.closest('.survey-scale');
+      group.querySelectorAll('label').forEach(l => l.classList.remove('sel'));
+      lbl.classList.add('sel');
+    });
+  });
+  root.querySelector('#surveyForm').onsubmit = (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target); const answers = {};
+    for (const q of pQs) { const v = fd.get(q.id); if (v) answers[q.id] = +v; }
+    store.submitPerception(token, answers);
+    root.querySelector('.survey').innerHTML = `<div class="survey-thanks state-box">
+      <span class="state-icon">✅</span><h3>شكراً لمشاركتك</h3>
+      <p>سُجّل ردك بشكل مجهول. يمكنك إغلاق الصفحة.</p></div>`;
+  };
 }
 
 // ─── الوضع الليلي ───

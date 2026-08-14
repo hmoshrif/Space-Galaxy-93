@@ -62,5 +62,18 @@ assert(roleNav('executive').includes('report') && !roleNav('assessor').includes(
   'الأدوار تحجب الشاشات بشكل صحيح');
 assert(Object.keys(ROLES).length === 5, 'خمسة أدوار معرّفة');
 
+console.log('› استبيان الإدراك المجهول ورفع الأدلة');
+const token = a.surveyToken;
+assert(!!token && !!storeMod.findAssessmentByToken(token), 'رمز مشاركة الاستبيان صالح');
+const pQ = a.snapshot.flatMap(d => d.questions).filter(q => q.type === 'perception')[0];
+storeMod.submitPerception(token, { [pQ.id]: 5 });
+storeMod.submitPerception(token, { [pQ.id]: 4 });
+assert(storeMod.perceptionCount() === 2, 'سُجّل ردّان مجهولان');
+const pgWith = perceptionGap(a.snapshot, a.responses, a.perceptionSubmissions);
+assert(pgWith.some(g => g.sampleSize === 2), 'فجوة الإدراك تعكس حجم العينة المجهولة');
+// الدليل المكرر: البذرة تُرفق دليلاً لـ q1
+const anyEv = Object.values(a.responses).flatMap(r => r.evidence || [])[0];
+assert(anyEv === undefined || storeMod.findDuplicateEvidence('sha-غير-موجودة') === null, 'كشف المكرر لا يعطي إيجابيات كاذبة');
+
 console.log(`\n${failures === 0 ? '✅ نجحت كل الفحوص' : `❌ فشل ${failures} فحصاً`}`);
 process.exit(failures === 0 ? 0 : 1);
