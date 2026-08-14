@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكعب أنظمة الابتكار — NIS × SSI × TIS</title>
+<meta name="description" content="إطار تحليلي ثلاثي الأبعاد يَصِف كل نشاط ابتكاري كإحداثيٍّ دقيق عند تقاطع النظام الوطني والقطاعي والتكنولوجي للابتكار. استكشف المكعب التفاعلي بأمثلة حقيقية.">
+<meta property="og:title" content="مكعب أنظمة الابتكار — NIS × SSI × TIS">
+<meta property="og:description" content="ثلاث عدسات متعامدة لفهم الابتكار: أين يحدث، وفي أي قطاع، وحول أي تقنية.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23c084fc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Crect x='6.5' y='6.5' width='19' height='19' rx='4' fill='none' stroke='%23070b16' stroke-width='2.5'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="bg-aura"></div>
+<div class="bg-grid"></div>
+<div class="bg-noise"></div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top"><span class="cube"></span><span>مكعب أنظمة الابتكار</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="القائمة" aria-expanded="false">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#explorer">المستكشف</a>
+      <a href="#axes">المحاور الثلاثة</a>
+      <a href="#functions">وظائف TIS</a>
+      <a href="#method">المنهجية</a>
+      <a href="#explorer" class="nav-cta">جرّب المكعب</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>NIS · X &nbsp;×&nbsp; SSI · Y &nbsp;×&nbsp; TIS · Z</span>
+    <h1 class="hero-title reveal">إطارٌ تحليليٌّ للابتكار في <span class="gradient-text">ثلاثة أبعاد متعامدة</span></h1>
+    <p class="hero-sub reveal">كل نشاط ابتكاري ليس نقطةً معلّقة في الفراغ، بل إحداثيٌّ دقيق عند تقاطع ثلاثة أنظمة مستقلة:
+      <b>أين</b> يحدث (وطنيًا)، و<b>في أي قطاع</b>، و<b>حول أي تقنية</b>.
+      هذا الموقع يُحوّل النموذج النظري إلى مكعبٍ تفاعليٍّ يمكنك تدويره واستكشافه بأمثلة حقيقية.</p>
+    <div class="hero-actions reveal">
+      <a href="#explorer" class="btn btn-primary">استكشف المكعب التفاعلي ↙</a>
+      <a href="#axes" class="btn btn-ghost">تعرّف على المحاور</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="stat"><div class="n x">NIS</div><div class="l">النظام الوطني — أين؟</div></div>
+      <div class="stat"><div class="n y">SSI</div><div class="l">النظام القطاعي — أي قطاع؟</div></div>
+      <div class="stat"><div class="n z">TIS</div><div class="l">النظام التكنولوجي — أي تقنية؟</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXPLORER ===================== -->
+<section class="section" id="explorer">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Interactive Explorer</span>
+      <h2>المكعب التحليلي — ثلاث عدسات متعامدة</h2>
+      <p>اسحب لتدوير الفضاء، واختر مثالًا حقيقيًا ليستقرّ المؤشّر عند خليّته. كل خليّة هي تقاطعٌ فريد بين دولةٍ وقطاعٍ وتقنية.</p>
+    </div>
+
+    <div class="explorer reveal">
+      <!-- 3D STAGE -->
+      <div class="stagecard">
+        <div class="stagebtns">
+          <button class="sbtn" id="spin" aria-pressed="false">تدوير تلقائي</button>
+          <button class="sbtn" id="reset">إعادة الزاوية</button>
+        </div>
+        <div class="stage" id="stage">
+          <div class="scene" id="scene">
+            <div class="origin" id="origin"></div>
+          </div>
+          <div class="stagehint">↻ اسحب للتدوير</div>
+        </div>
+      </div>
+
+      <!-- PANEL -->
+      <div class="panel">
+        <div class="legend">
+          <div class="legrow x"><span class="swatch"></span><span class="ax">X · NIS</span><span class="name">النظام الوطني</span><span class="q">أين؟</span></div>
+          <div class="legrow y"><span class="swatch"></span><span class="ax">Y · SSI</span><span class="name">النظام القطاعي</span><span class="q">أي قطاع؟</span></div>
+          <div class="legrow z"><span class="swatch"></span><span class="ax">Z · TIS</span><span class="name">النظام التكنولوجي</span><span class="q">أي تقنية؟</span></div>
+        </div>
+        <div>
+          <div class="sectitle">أمثلة تطبيقية — اختر إحداثيًّا</div>
+          <div class="examples" id="examples"></div>
+        </div>
+        <div class="readout" id="readout"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AXES ===================== -->
+<section class="section" id="axes">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">The Three Lenses</span>
+      <h2>ثلاثة أنظمة مستقلة، لا تكرارٌ لبعضها</h2>
+      <p>قوة الإطار تكمن في فصل المحاور: تثبيت محورَين وتغيير الثالث يَعزل أثر كل نظام على حِدة، فتتضح مصادر القوة والضعف في أي نشاط ابتكاري.</p>
+    </div>
+    <div class="axis-grid">
+      <article class="axis-card x reveal">
+        <span class="badge">X · NIS</span>
+        <h3>النظام الوطني للابتكار</h3>
+        <div class="q">السؤال: أين يحدث الابتكار؟</div>
+        <p>الإطار المؤسسي والسياسي والتمويلي داخل حدود الدولة: الجامعات، مراكز البحث، التشريعات، رأس المال، والثقافة. هو الذي يُحدّد البيئة الحاضنة التي تجري فيها كل الأنشطة.</p>
+        <div class="tags"><span class="tag">السعودية</span><span class="tag">الإمارات</span><span class="tag">ألمانيا</span></div>
+      </article>
+      <article class="axis-card y reveal">
+        <span class="badge">Y · SSI</span>
+        <h3>النظام القطاعي للابتكار</h3>
+        <div class="q">السؤال: في أي قطاع؟</div>
+        <p>قاعدة المعرفة وديناميكيات الطلب والفاعلون الخاصّون بقطاعٍ بعينه. منطق الابتكار في الصحة يختلف جذريًا عنه في الطاقة أو الزراعة، حتى داخل الدولة نفسها.</p>
+        <div class="tags"><span class="tag">الصحة</span><span class="tag">الطاقة</span><span class="tag">النقل</span><span class="tag">الزراعة</span></div>
+      </article>
+      <article class="axis-card z reveal">
+        <span class="badge">Z · TIS</span>
+        <h3>النظام التكنولوجي للابتكار</h3>
+        <div class="q">السؤال: حول أي تقنية؟</div>
+        <p>الشبكة العالمية من الفاعلين والمعارف المتمحورة حول تقنيةٍ واحدة. هو البُعد المتعامد الحقيقي: التقنية تعبر حدود الدول والقطاعات معًا فتُكمل النموذج بدلًا من تكراره.</p>
+        <div class="tags"><span class="tag">ذكاء اصطناعي</span><span class="tag">هيدروجين أخضر</span><span class="tag">تقنية حيوية</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FUNCTIONS ===================== -->
+<section class="section" id="functions">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Seven Functions · TIS</span>
+      <h2>الوظائف السبع التي تقيس صحة الخليّة</h2>
+      <p>لكل خليّة في المكعب، تُشخّص الوظائف السبع للنظام التكنولوجي قوّتها وثغراتها — أين يتعثّر النشاط الابتكاري ولماذا.</p>
+    </div>
+    <div class="func-grid">
+      <div class="func reveal"><div class="num">F1</div><h4>أنشطة المعرفة</h4><p>توليد المعرفة العلمية والتقنية ونشرها عبر البحث والتطوير والتعلّم.</p></div>
+      <div class="func reveal"><div class="num">F2</div><h4>تطوير المعرفة وتبادلها</h4><p>تدفّق المعرفة بين الفاعلين عبر الشبكات والتعاون والتحالفات.</p></div>
+      <div class="func reveal"><div class="num">F3</div><h4>توجيه البحث</h4><p>تشكيل التوقّعات والرؤى التي تُوجّه استثمارات وجهود الفاعلين نحو مسارٍ تقني.</p></div>
+      <div class="func reveal"><div class="num">F4</div><h4>ريادة التجريب</h4><p>دخول روّاد الأعمال وتجربة التطبيقات الحقيقية التي تختبر جدوى التقنية.</p></div>
+      <div class="func reveal"><div class="num">F5</div><h4>خلق الأسواق</h4><p>تكوين مساحات طلبٍ أولية وأسواق مُتخصّصة تحتضن التقنية الناشئة.</p></div>
+      <div class="func reveal"><div class="num">F6</div><h4>تعبئة الموارد</h4><p>توفير رأس المال والكفاءات والبنية التحتية اللازمة للنمو.</p></div>
+      <div class="func reveal"><div class="num">F7</div><h4>تكوين الشرعية</h4><p>بناء القبول المؤسسي والاجتماعي ومواجهة مقاومة الوضع القائم.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== METHOD ===================== -->
+<section class="section" id="method">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">How To Read It</span>
+      <h2>كيف تقرأ المكعب في ثلاث خطوات</h2>
+      <p>الإطار أداةُ تشخيصٍ عملية: حدّد الخليّة، اعزل المتغيّر، ثم شخّص الوظائف.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h4>حدّد الإحداثي</h4><p>اختر الدولة (X) والقطاع (Y) والتقنية (Z). تقاطعها يُعطيك خليّةً واحدة تمثّل نشاطًا ابتكاريًا محددًا تمامًا.</p></div>
+      <div class="step reveal"><h4>اعزل المتغيّر</h4><p>ثبّت محورَين وغيّر الثالث. مقارنة خليّتين على نفس محورَي Y وZ تعزل أثر النظام الوطني وحده.</p></div>
+      <div class="step reveal"><h4>شخّص الوظائف</h4><p>قِس الوظائف السبع للنظام التكنولوجي في تلك الخليّة لتكتشف أين تتركّز الثغرات وما الذي يحتاج تدخلًا.</p></div>
+    </div>
+
+    <div class="cta-band reveal">
+      <h2>التقنية هي البُعد المتعامد الحقيقي</h2>
+      <p>المحور Z (النظام التكنولوجي) يعبر حدود الدول والقطاعات معًا، فيُكمل النموذج بدلًا من تكراره — وهذه هي قوة الفصل بين المحاور الثلاثة.</p>
+      <div class="hero-actions">
+        <a href="#explorer" class="btn btn-primary">عُد إلى المكعب التفاعلي</a>
+        <a href="#axes" class="btn btn-ghost">راجع المحاور</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="cube"></span><span>مكعب أنظمة الابتكار</span></a>
+        <p>إطارٌ تحليليٌّ يَصِف الابتكار كإحداثيٍّ ثلاثي الأبعاد عند تقاطع الأنظمة الوطنية والقطاعية والتكنولوجية.</p>
+      </div>
+      <div class="foot-col">
+        <h5>المحاور</h5>
+        <a href="#axes">X · النظام الوطني (NIS)</a>
+        <a href="#axes">Y · النظام القطاعي (SSI)</a>
+        <a href="#axes">Z · النظام التكنولوجي (TIS)</a>
+      </div>
+      <div class="foot-col">
+        <h5>روابط</h5>
+        <a href="#explorer">المستكشف التفاعلي</a>
+        <a href="#functions">الوظائف السبع</a>
+        <a href="#method">المنهجية</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> مكعب أنظمة الابتكار — جميع الحقوق محفوظة.</span>
+      <span class="note">المحور Z (النظام التكنولوجي) هو البُعد المتعامد الحقيقي: التقنية تعبر حدود الدول والقطاعات معًا، فتُكمل النموذج بدلًا من تكراره.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="العودة إلى الأعلى">↑</button>
+
+<script src="assets/js/cube.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
