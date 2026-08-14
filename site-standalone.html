@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكعب أنظمة الابتكار — NIS × SSI × TIS</title>
+<meta name="description" content="إطار تحليلي ثلاثي الأبعاد يَصِف كل نشاط ابتكاري كإحداثيٍّ دقيق عند تقاطع النظام الوطني والقطاعي والتكنولوجي للابتكار. استكشف المكعب التفاعلي بأمثلة حقيقية.">
+<meta property="og:title" content="مكعب أنظمة الابتكار — NIS × SSI × TIS">
+<meta property="og:description" content="ثلاث عدسات متعامدة لفهم الابتكار: أين يحدث، وفي أي قطاع، وحول أي تقنية.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   مكعب أنظمة الابتكار — Innovation Systems Cube
+   Premium UI/UX stylesheet (v2)
+   ========================================================= */
+
+:root{
+  /* surfaces */
+  --ink0:#060912;
+  --ink1:#0c1322;
+  --ink2:#111a2d;
+  --ink3:#0a1120;
+  --line:#1e2a45;
+  --line-soft:#172037;
+  --glass:rgba(18,27,47,.55);
+  --glass-2:rgba(10,15,28,.45);
+
+  /* axis accents */
+  --cyan:#2dd4ee;   /* NIS  – X */
+  --amber:#fcc44a;  /* SSI  – Y */
+  --violet:#c891fc; /* TIS  – Z */
+  --cyan-d:#0e3a47;
+  --violet-d:#2c1d49;
+
+  /* text */
+  --text:#eef2fb;
+  --muted:#9aa9c4;
+  --muted-2:#6c7c9b;
+
+  /* type */
+  --arabic:"IBM Plex Sans Arabic","Tajawal","SF Arabic","Geeza Pro","Segoe UI",Tahoma,"Noto Sans Arabic",system-ui,sans-serif;
+  --display:"Tajawal","IBM Plex Sans Arabic","SF Arabic",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+
+  /* layout */
+  --maxw:1180px;
+  --radius:18px;
+  --radius-lg:24px;
+
+  /* elevation */
+  --shadow-1:0 1px 0 rgba(255,255,255,.03) inset, 0 18px 40px -28px #000;
+  --shadow-2:0 30px 80px -40px #000;
+  --glow-cyan:0 0 0 1px rgba(45,212,238,.25), 0 18px 50px -22px rgba(45,212,238,.45);
+
+  /* motion */
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+html,body{height:100%}
+body{
+  font-family:var(--arabic);
+  background:var(--ink0);
+  color:var(--text);
+  min-height:100%;
+  overflow-x:hidden;
+  line-height:1.65;
+  letter-spacing:0;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+section{position:relative}
+::selection{background:rgba(45,212,238,.28); color:#fff}
+
+/* keyboard accessibility */
+:focus-visible{outline:2px solid var(--cyan); outline-offset:3px; border-radius:6px}
+button{font:inherit}
+
+/* ---------- ambient backgrounds ---------- */
+.bg-aura{
+  position:fixed; inset:0; z-index:-3; pointer-events:none;
+  background:
+    radial-gradient(1200px 760px at 80% -12%, rgba(20,42,76,.65) 0%, transparent 55%),
+    radial-gradient(1000px 680px at 4% 14%, rgba(40,29,73,.6) 0%, transparent 52%),
+    radial-gradient(1000px 760px at 98% 92%, rgba(15,46,60,.5) 0%, transparent 55%),
+    var(--ink0);
+}
+.bg-grid{
+  position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.5;
+  background-image:
+    linear-gradient(rgba(30,42,69,.4) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(30,42,69,.4) 1px,transparent 1px);
+  background-size:62px 62px;
+  -webkit-mask-image:radial-gradient(ellipse 78% 58% at 50% 0%,#000 0%,transparent 72%);
+          mask-image:radial-gradient(ellipse 78% 58% at 50% 0%,#000 0%,transparent 72%);
+}
+.bg-noise{
+  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.035; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- scroll progress ---------- */
+.scroll-progress{
+  position:fixed; top:0; left:0; right:0; height:3px; z-index:60; transform-origin:right center;
+  transform:scaleX(0);
+  background:linear-gradient(90deg,var(--cyan),var(--amber) 52%,var(--violet));
+  box-shadow:0 0 12px rgba(45,212,238,.5);
+}
+
+.container{width:100%; max-width:var(--maxw); margin:0 auto; padding:0 24px}
+
+/* ===================== NAVBAR ===================== */
+.nav{
+  position:sticky; top:0; z-index:50;
+  backdrop-filter:saturate(160%) blur(16px);
+  -webkit-backdrop-filter:saturate(160%) blur(16px);
+  background:rgba(6,9,18,.55);
+  border-bottom:1px solid transparent;
+  transition:border-color .35s var(--ease), background .35s var(--ease);
+}
+.nav.scrolled{border-color:var(--line-soft); background:rgba(6,9,18,.82)}
+.nav-inner{display:flex; align-items:center; gap:18px; height:68px}
+.brand{display:flex; align-items:center; gap:11px; font-family:var(--display); font-weight:800; font-size:15.5px; letter-spacing:-.01em}
+.brand .cube{
+  width:28px; height:28px; border-radius:8px; flex:none; position:relative;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  box-shadow:0 6px 18px -6px rgba(124,196,255,.6);
+  transition:transform .4s var(--ease-out);
+}
+.brand:hover .cube{transform:rotate(-12deg) scale(1.06)}
+.brand .cube::after{content:""; position:absolute; inset:5px; border-radius:4px; border:1.6px solid rgba(6,9,18,.7)}
+.nav-links{display:flex; align-items:center; gap:4px; margin-inline-start:auto}
+.nav-links a{
+  position:relative; color:var(--muted); font-size:13.5px; font-weight:600;
+  padding:9px 14px; border-radius:10px; transition:color .2s var(--ease), background .2s var(--ease);
+}
+.nav-links a:not(.nav-cta)::after{
+  content:""; position:absolute; right:14px; left:14px; bottom:5px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  transform:scaleX(0); transform-origin:right; transition:transform .25s var(--ease);
+}
+.nav-links a:not(.nav-cta):hover{color:var(--text)}
+.nav-links a:not(.nav-cta).active{color:var(--text)}
+.nav-links a:not(.nav-cta).active::after{transform:scaleX(1)}
+.nav-cta{
+  margin-inline-start:8px;
+  background:linear-gradient(90deg,var(--cyan),var(--violet));
+  color:#04111c !important; font-weight:800 !important;
+  box-shadow:0 10px 26px -12px var(--cyan);
+  transition:transform .2s var(--ease), filter .2s var(--ease), box-shadow .2s var(--ease);
+}
+.nav-cta:hover{transform:translateY(-1px); filter:brightness(1.08); box-shadow:0 14px 30px -12px var(--cyan)}
+.nav-toggle{
+  display:none; margin-inline-start:auto; background:rgba(255,255,255,.04); border:1px solid var(--line);
+  color:var(--text); border-radius:10px; width:42px; height:40px; cursor:pointer; font-size:18px;
+  transition:.2s var(--ease);
+}
+.nav-toggle:hover{border-color:#33446c}
+
+/* ===================== HERO ===================== */
+.hero{padding:84px 0 36px; position:relative}
+.hero::before{
+  content:""; position:absolute; top:-40px; inset-inline-start:-120px; width:420px; height:420px;
+  background:radial-gradient(circle, rgba(45,212,238,.16), transparent 60%);
+  filter:blur(20px); pointer-events:none; z-index:-1;
+  animation:float 9s ease-in-out infinite;
+}
+.hero::after{
+  content:""; position:absolute; bottom:-80px; inset-inline-end:-100px; width:380px; height:380px;
+  background:radial-gradient(circle, rgba(200,145,252,.14), transparent 60%);
+  filter:blur(20px); pointer-events:none; z-index:-1;
+  animation:float 11s ease-in-out infinite reverse;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.22em;
+  color:var(--muted); text-transform:uppercase; direction:ltr; text-align:right;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:7px 14px; border:1px solid var(--line); border-radius:999px;
+  background:rgba(255,255,255,.02);
+}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan); animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+h1.hero-title{
+  font-family:var(--display);
+  font-size:clamp(32px,5.6vw,58px); font-weight:900; letter-spacing:-.025em;
+  line-height:1.12; margin:20px 0 20px; max-width:19ch;
+}
+.gradient-text{
+  background:linear-gradient(100deg,var(--cyan),var(--amber) 50%,var(--violet) 92%);
+  background-size:200% auto;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:shine 7s linear infinite;
+}
+@keyframes shine{to{background-position:200% center}}
+.hero-sub{color:var(--muted); font-size:clamp(15px,1.65vw,18.5px); max-width:66ch; line-height:1.85}
+.hero-sub b{color:#dde6f6; font-weight:700}
+.hero-actions{display:flex; gap:13px; flex-wrap:wrap; margin-top:30px}
+
+.btn{
+  position:relative; overflow:hidden;
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+  padding:14px 24px; border-radius:13px; font-weight:800; font-size:14.5px;
+  font-family:var(--arabic); border:1px solid transparent;
+  transition:transform .2s var(--ease), filter .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+}
+.btn-primary{background:linear-gradient(90deg,var(--cyan),var(--violet)); color:#04111c; box-shadow:0 16px 38px -16px var(--cyan)}
+.btn-primary::before{
+  content:""; position:absolute; top:0; bottom:0; width:40%; left:-60%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  transform:skewX(-20deg); transition:left .6s var(--ease);
+}
+.btn-primary:hover{transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 20px 44px -16px var(--cyan)}
+.btn-primary:hover::before{left:130%}
+.btn-ghost{background:rgba(255,255,255,.03); border-color:var(--line); color:var(--text)}
+.btn-ghost:hover{border-color:#3a4f7d; background:rgba(255,255,255,.07); transform:translateY(-2px)}
+
+.hero-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:50px; max-width:640px}
+.stat{
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,var(--glass),var(--glass-2));
+  border:1px solid var(--line); border-radius:16px; padding:18px 20px;
+  transition:transform .25s var(--ease), border-color .25s var(--ease);
+}
+.stat::before{content:""; position:absolute; inset:0 auto auto 0; width:100%; height:2px; opacity:.7}
+.stat:hover{transform:translateY(-3px); border-color:#33446c}
+.stat .n{font-family:var(--display); font-size:28px; font-weight:900; letter-spacing:-.02em}
+.stat .n.x{color:var(--cyan)} .stat .n.y{color:var(--amber)} .stat .n.z{color:var(--violet)}
+.stat:nth-child(1)::before{background:linear-gradient(90deg,var(--cyan),transparent)}
+.stat:nth-child(2)::before{background:linear-gradient(90deg,var(--amber),transparent)}
+.stat:nth-child(3)::before{background:linear-gradient(90deg,var(--violet),transparent)}
+.stat .l{color:var(--muted); font-size:12.5px; margin-top:5px}
+
+/* ===================== SECTION HEADINGS ===================== */
+.section{padding:72px 0}
+.section-head{max-width:740px; margin-bottom:42px}
+.kicker{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--cyan); direction:ltr; text-align:right; display:inline-flex; align-items:center; gap:8px;
+  margin-bottom:14px;
+}
+.kicker::before{content:""; width:22px; height:1px; background:linear-gradient(90deg,transparent,var(--cyan))}
+.section-head h2{font-family:var(--display); font-size:clamp(25px,3.6vw,38px); font-weight:800; letter-spacing:-.02em; line-height:1.22}
+.section-head p{color:var(--muted); font-size:16px; margin-top:15px; line-height:1.9}
+
+/* ===================== EXPLORER ===================== */
+.explorer{display:grid; gap:24px; grid-template-columns:1.15fr 1fr; align-items:start}
+.stagecard{
+  position:relative;
+  background:linear-gradient(180deg,var(--glass),var(--glass-2));
+  border:1px solid var(--line); border-radius:var(--radius-lg);
+  padding:14px; overflow:hidden; box-shadow:var(--shadow-2);
+}
+.stagecard::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; pointer-events:none;
+  background:linear-gradient(140deg,rgba(45,212,238,.4),transparent 40%,transparent 60%,rgba(200,145,252,.4));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude; opacity:.5;
+}
+.stage{position:relative; width:100%; height:clamp(390px,55vh,560px); perspective:1100px; perspective-origin:50% 46%; cursor:grab; touch-action:none}
+.stage:active{cursor:grabbing}
+.scene{position:absolute; inset:0; transform-style:preserve-3d; transition:transform .05s linear}
+.origin{position:absolute; left:50%; top:54%; width:0; height:0; transform-style:preserve-3d}
+
+.bar{position:absolute; height:2px; border-radius:2px; transform-origin:0 50%}
+.bar.x{background:linear-gradient(90deg,rgba(45,212,238,.12),var(--cyan)); box-shadow:0 0 14px rgba(45,212,238,.55)}
+.bar.y{background:linear-gradient(90deg,rgba(252,196,74,.12),var(--amber)); box-shadow:0 0 14px rgba(252,196,74,.55)}
+.bar.z{background:linear-gradient(90deg,rgba(200,145,252,.12),var(--violet)); box-shadow:0 0 14px rgba(200,145,252,.55)}
+
+.tip{position:absolute; width:0;height:0; border-style:solid}
+.floor{position:absolute; transform-origin:0 0;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  opacity:.3;
+}
+.lbl{position:absolute; transform-origin:50% 50%; white-space:nowrap; font-family:var(--display);
+  font-weight:800; font-size:14px; pointer-events:none; will-change:transform}
+.lbl .code{font-family:var(--mono); font-size:10px; letter-spacing:.16em; display:block; opacity:.85; direction:ltr; font-weight:600}
+.lbl.x{color:var(--cyan)} .lbl.y{color:var(--amber)} .lbl.z{color:var(--violet)}
+
+.tick{position:absolute; transform-origin:50% 50%; pointer-events:none; will-change:transform}
+.tick .dot{width:7px;height:7px;border-radius:50%; margin:0 auto 3px; opacity:.55; transition:.2s}
+.tick .t{font-size:11px; color:var(--muted); white-space:nowrap; transition:.2s}
+.tick.x .dot{background:var(--cyan)} .tick.y .dot{background:var(--amber)} .tick.z .dot{background:var(--violet)}
+.tick.on .t{color:var(--text); font-weight:800}
+.tick.on .dot{opacity:1; box-shadow:0 0 10px currentColor; transform:scale(1.25)}
+
+.guide{position:absolute; height:0; border-top:1px dashed rgba(255,255,255,.5); transform-origin:0 50%}
+
+.marker{position:absolute; will-change:transform; pointer-events:none}
+.marker .core{
+  position:absolute; left:-9px; top:-9px; width:18px;height:18px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#fff,#cfe9ff 40%,#7cc4ff 75%);
+  box-shadow:0 0 0 4px rgba(255,255,255,.12),0 0 28px 7px rgba(124,196,255,.7);
+}
+.marker .halo{position:absolute; left:-22px; top:-22px; width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.4); animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(.7);opacity:.7}50%{transform:scale(1.1);opacity:.15}}
+.marker .mlbl{position:absolute; transform-origin:0 50%; right:14px; top:-9px;
+  background:rgba(6,9,18,.85); border:1px solid var(--line); border-radius:9px;
+  padding:6px 10px; font-size:12px; font-weight:700; white-space:nowrap;
+  box-shadow:0 8px 22px -10px #000}
+
+.stagehint{position:absolute; bottom:12px; right:16px; font-size:11px; color:var(--muted);
+  font-family:var(--mono); letter-spacing:.04em; direction:rtl; pointer-events:none; opacity:.8}
+.stagebtns{position:absolute; top:14px; left:14px; display:flex; gap:8px; z-index:3}
+.sbtn{background:rgba(255,255,255,.05); border:1px solid var(--line); color:var(--muted);
+  border-radius:9px; padding:7px 12px; font-size:12px; cursor:pointer; font-family:var(--arabic); transition:.2s var(--ease)}
+.sbtn:hover{color:var(--text); border-color:#33446c; background:rgba(255,255,255,.09)}
+.sbtn[aria-pressed="true"]{color:#04111c; border-color:transparent; background:linear-gradient(90deg,var(--cyan),var(--violet)); font-weight:700}
+
+/* panel */
+.panel{display:flex; flex-direction:column; gap:18px}
+.legend{display:grid; gap:6px; background:var(--ink1); border:1px solid var(--line); border-radius:18px; padding:14px}
+.legrow{display:flex; align-items:center; gap:12px; padding:9px 10px; border-radius:12px; transition:background .2s}
+.legrow:hover{background:rgba(255,255,255,.03)}
+.swatch{width:14px;height:14px;border-radius:5px; flex:none; box-shadow:0 0 10px currentColor}
+.legrow.x .swatch{background:var(--cyan);color:var(--cyan)}
+.legrow.y .swatch{background:var(--amber);color:var(--amber)}
+.legrow.z .swatch{background:var(--violet);color:var(--violet)}
+.legrow .ax{font-family:var(--mono); font-size:11px; color:var(--muted); width:54px; direction:ltr}
+.legrow .name{font-weight:800; font-size:14px}
+.legrow .q{color:var(--muted); font-size:13px; margin-inline-start:auto}
+
+.sectitle{font-size:12.5px; color:var(--muted-2); font-weight:700; margin-bottom:12px; letter-spacing:.01em; text-transform:none}
+.examples{display:grid; gap:10px}
+.ex{
+  position:relative; text-align:right; width:100%; cursor:pointer;
+  background:var(--ink1); border:1px solid var(--line); border-radius:14px;
+  padding:13px 15px; color:var(--text); font-family:var(--arabic);
+  display:flex; flex-direction:column; gap:7px;
+  transition:transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+}
+.ex:hover{border-color:#33446c; transform:translateX(-3px)}
+.ex[aria-pressed="true"]{border-color:transparent;
+  background:linear-gradient(180deg,rgba(45,212,238,.1),rgba(200,145,252,.1));
+  box-shadow:0 0 0 1px #3a4f7d inset}
+.ex[aria-pressed="true"]::before{
+  content:""; position:absolute; inset-inline-start:0; top:14px; bottom:14px; width:3px; border-radius:3px;
+  background:linear-gradient(180deg,var(--cyan),var(--violet));
+}
+.ex .title{font-weight:800; font-size:14.5px; line-height:1.5}
+.ex .coords{display:flex; gap:7px; flex-wrap:wrap}
+.chip{font-size:11px; padding:3px 9px; border-radius:999px; border:1px solid currentColor;
+  font-weight:700; display:inline-flex; gap:5px; align-items:center; background:rgba(255,255,255,.02)}
+.chip.x{color:var(--cyan)} .chip.y{color:var(--amber)} .chip.z{color:var(--violet)}
+
+.readout{background:linear-gradient(180deg,var(--ink2),var(--ink3)); border:1px solid var(--line); border-radius:18px; padding:20px}
+.readout .rt{font-family:var(--display); font-size:16.5px; font-weight:800; margin-bottom:11px; line-height:1.5}
+.readout .rd{color:#c7d2e6; font-size:14px; line-height:1.9}
+.readout .rd b{color:#fff}
+.formula{font-family:var(--mono); direction:ltr; text-align:left; font-size:12px;
+  color:var(--muted); margin-top:15px; padding-top:13px; border-top:1px solid var(--line);
+  line-height:1.8; word-break:break-word}
+.formula .c{color:var(--cyan)} .formula .a{color:var(--amber)} .formula .v{color:var(--violet)}
+
+/* ===================== AXIS CARDS ===================== */
+.axis-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+.axis-card{
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,var(--glass),var(--glass-2));
+  border:1px solid var(--line); border-radius:var(--radius); padding:28px 24px;
+  transition:transform .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.axis-card::after{
+  content:""; position:absolute; inset-inline-end:-60px; top:-60px; width:160px; height:160px; border-radius:50%;
+  filter:blur(28px); opacity:.18; pointer-events:none; transition:opacity .3s;
+}
+.axis-card.x::after{background:var(--cyan)} .axis-card.y::after{background:var(--amber)} .axis-card.z::after{background:var(--violet)}
+.axis-card:hover{transform:translateY(-6px); border-color:#33446c; box-shadow:var(--shadow-2)}
+.axis-card:hover::after{opacity:.32}
+.axis-card::before{content:""; position:absolute; inset:0 0 auto 0; height:3px}
+.axis-card.x::before{background:linear-gradient(90deg,transparent,var(--cyan))}
+.axis-card.y::before{background:linear-gradient(90deg,transparent,var(--amber))}
+.axis-card.z::before{background:linear-gradient(90deg,transparent,var(--violet))}
+.axis-card .badge{font-family:var(--mono); font-size:11px; letter-spacing:.14em; direction:ltr;
+  padding:6px 11px; border-radius:9px; display:inline-block; font-weight:600; margin-bottom:18px}
+.axis-card.x .badge{color:var(--cyan); background:rgba(45,212,238,.1); border:1px solid rgba(45,212,238,.3)}
+.axis-card.y .badge{color:var(--amber); background:rgba(252,196,74,.1); border:1px solid rgba(252,196,74,.3)}
+.axis-card.z .badge{color:var(--violet); background:rgba(200,145,252,.1); border:1px solid rgba(200,145,252,.3)}
+.axis-card h3{font-family:var(--display); font-size:21px; font-weight:800; margin-bottom:7px; letter-spacing:-.01em}
+.axis-card .q{font-size:13px; color:var(--muted-2); margin-bottom:15px; font-family:var(--mono); direction:rtl}
+.axis-card p{color:var(--muted); font-size:14px; line-height:1.9}
+.axis-card .tags{display:flex; flex-wrap:wrap; gap:7px; margin-top:18px}
+.axis-card .tag{font-size:12px; padding:5px 11px; border-radius:999px; background:rgba(255,255,255,.04);
+  border:1px solid var(--line); color:var(--text); transition:.18s}
+.axis-card .tag:hover{border-color:#3a4f7d; background:rgba(255,255,255,.07)}
+
+/* ===================== FUNCTIONS ===================== */
+.func-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(248px,1fr)); gap:16px}
+.func{
+  position:relative; overflow:hidden;
+  background:var(--ink1); border:1px solid var(--line); border-radius:16px; padding:22px;
+  transition:transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+}
+.func:hover{border-color:#33446c; transform:translateY(-4px); background:var(--ink2)}
+.func .num{
+  font-family:var(--mono); font-size:13px; font-weight:600; color:var(--violet);
+  width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+  background:rgba(200,145,252,.1); border:1px solid rgba(200,145,252,.25); margin-bottom:16px;
+}
+.func h4{font-family:var(--display); font-size:16px; font-weight:800; margin-bottom:9px}
+.func p{color:var(--muted); font-size:13.5px; line-height:1.8}
+
+/* ===================== METHOD STEPS ===================== */
+.steps{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; counter-reset:step}
+.step{
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,var(--glass),var(--glass-2));
+  border:1px solid var(--line); border-radius:var(--radius); padding:26px;
+  transition:transform .22s var(--ease), border-color .22s var(--ease);
+}
+.step:hover{transform:translateY(-4px); border-color:#33446c}
+.step::before{counter-increment:step; content:"0" counter(step);
+  font-family:var(--mono); font-size:36px; font-weight:800;
+  background:linear-gradient(180deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  display:block; margin-bottom:12px; opacity:.9}
+.step h4{font-family:var(--display); font-size:18px; font-weight:800; margin-bottom:9px}
+.step p{color:var(--muted); font-size:14px; line-height:1.85}
+
+/* ===================== CTA BAND ===================== */
+.cta-band{
+  position:relative; overflow:hidden;
+  margin:48px 0 0;
+  background:
+    radial-gradient(720px 320px at 80% 0%, rgba(45,212,238,.16),transparent 60%),
+    radial-gradient(720px 320px at 10% 100%, rgba(200,145,252,.16),transparent 60%),
+    linear-gradient(180deg,var(--glass),var(--glass-2));
+  border:1px solid var(--line); border-radius:28px; padding:58px 36px; text-align:center;
+}
+.cta-band::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; pointer-events:none;
+  background:linear-gradient(120deg,rgba(45,212,238,.45),transparent 45%,transparent 55%,rgba(200,145,252,.45));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+}
+.cta-band h2{font-family:var(--display); font-size:clamp(25px,3.8vw,40px); font-weight:800; line-height:1.22; margin-bottom:15px; letter-spacing:-.02em}
+.cta-band p{color:var(--muted); font-size:16px; max-width:62ch; margin:0 auto 28px; line-height:1.9}
+.cta-band .hero-actions{justify-content:center}
+
+/* ===================== FOOTER ===================== */
+footer.site-footer{border-top:1px solid var(--line); margin-top:72px; padding:48px 0 32px}
+.foot-grid{display:flex; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-bottom:30px}
+.foot-brand{max-width:36ch}
+.foot-brand p{color:var(--muted); font-size:13.5px; margin-top:14px; line-height:1.85}
+.foot-col h5{font-family:var(--display); font-size:13px; font-weight:800; margin-bottom:13px; color:var(--text)}
+.foot-col a{display:block; color:var(--muted); font-size:13.5px; padding:5px 0; transition:color .15s, transform .15s}
+.foot-col a:hover{color:var(--cyan); transform:translateX(-3px)}
+.foot-bottom{border-top:1px solid var(--line-soft); padding-top:22px; display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; color:var(--muted-2); font-size:12.5px}
+.foot-bottom .note{max-width:72ch; line-height:1.75}
+
+/* ===================== BACK TO TOP ===================== */
+.to-top{
+  position:fixed; bottom:24px; inset-inline-start:24px; z-index:55;
+  width:46px; height:46px; border-radius:14px; cursor:pointer;
+  background:rgba(6,9,18,.7); border:1px solid var(--line); color:var(--text);
+  font-size:18px; backdrop-filter:blur(10px);
+  opacity:0; transform:translateY(14px) scale(.9); pointer-events:none;
+  transition:opacity .3s var(--ease), transform .3s var(--ease), border-color .2s, background .2s;
+}
+.to-top.show{opacity:1; transform:none; pointer-events:auto}
+.to-top:hover{border-color:#3a4f7d; background:rgba(18,27,47,.9)}
+
+/* ===================== reveal on scroll ===================== */
+.reveal{opacity:0; transform:translateY(26px); transition:opacity .7s var(--ease-out), transform .7s var(--ease-out)}
+.reveal.in{opacity:1; transform:none}
+/* stagger children within a grid */
+.axis-grid .reveal:nth-child(2){transition-delay:.08s}
+.axis-grid .reveal:nth-child(3){transition-delay:.16s}
+.func-grid .reveal:nth-child(2){transition-delay:.05s}
+.func-grid .reveal:nth-child(3){transition-delay:.1s}
+.func-grid .reveal:nth-child(4){transition-delay:.15s}
+.func-grid .reveal:nth-child(5){transition-delay:.2s}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:960px){
+  .explorer{grid-template-columns:1fr}
+  .axis-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .nav-links{
+    position:absolute; top:68px; right:0; left:0;
+    flex-direction:column; align-items:stretch; gap:4px; padding:16px 24px;
+    background:rgba(6,9,18,.97); border-bottom:1px solid var(--line);
+    display:none; backdrop-filter:blur(16px);
+  }
+  .nav-links.open{display:flex; animation:slideDown .25s var(--ease-out)}
+  @keyframes slideDown{from{opacity:0; transform:translateY(-8px)}to{opacity:1; transform:none}}
+  .nav-links a{padding:12px 14px}
+  .nav-links a:not(.nav-cta)::after{display:none}
+  .nav-cta{text-align:center; margin-top:6px}
+  .nav-toggle{display:block}
+  .hero{padding:60px 0 24px}
+  .hero-stats{grid-template-columns:1fr}
+  .stage{height:clamp(350px,46vh,440px)}
+  .foot-grid{flex-direction:column; gap:24px}
+  .to-top{bottom:18px; inset-inline-start:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important}
+  .marker .halo{animation:none}
+  .reveal{opacity:1; transform:none}
+  html{scroll-behavior:auto}
+}
+
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322d3ee'/%3E%3Cstop offset='1' stop-color='%23c084fc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Crect x='6.5' y='6.5' width='19' height='19' rx='4' fill='none' stroke='%23070b16' stroke-width='2.5'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="bg-aura"></div>
+<div class="bg-grid"></div>
+<div class="bg-noise"></div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#top"><span class="cube"></span><span>مكعب أنظمة الابتكار</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="القائمة" aria-expanded="false">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#explorer">المستكشف</a>
+      <a href="#axes">المحاور الثلاثة</a>
+      <a href="#functions">وظائف TIS</a>
+      <a href="#method">المنهجية</a>
+      <a href="#explorer" class="nav-cta">جرّب المكعب</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow reveal"><span class="dot"></span>NIS · X &nbsp;×&nbsp; SSI · Y &nbsp;×&nbsp; TIS · Z</span>
+    <h1 class="hero-title reveal">إطارٌ تحليليٌّ للابتكار في <span class="gradient-text">ثلاثة أبعاد متعامدة</span></h1>
+    <p class="hero-sub reveal">كل نشاط ابتكاري ليس نقطةً معلّقة في الفراغ، بل إحداثيٌّ دقيق عند تقاطع ثلاثة أنظمة مستقلة:
+      <b>أين</b> يحدث (وطنيًا)، و<b>في أي قطاع</b>، و<b>حول أي تقنية</b>.
+      هذا الموقع يُحوّل النموذج النظري إلى مكعبٍ تفاعليٍّ يمكنك تدويره واستكشافه بأمثلة حقيقية.</p>
+    <div class="hero-actions reveal">
+      <a href="#explorer" class="btn btn-primary">استكشف المكعب التفاعلي ↙</a>
+      <a href="#axes" class="btn btn-ghost">تعرّف على المحاور</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="stat"><div class="n x">NIS</div><div class="l">النظام الوطني — أين؟</div></div>
+      <div class="stat"><div class="n y">SSI</div><div class="l">النظام القطاعي — أي قطاع؟</div></div>
+      <div class="stat"><div class="n z">TIS</div><div class="l">النظام التكنولوجي — أي تقنية؟</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXPLORER ===================== -->
+<section class="section" id="explorer">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Interactive Explorer</span>
+      <h2>المكعب التحليلي — ثلاث عدسات متعامدة</h2>
+      <p>اسحب لتدوير الفضاء، واختر مثالًا حقيقيًا ليستقرّ المؤشّر عند خليّته. كل خليّة هي تقاطعٌ فريد بين دولةٍ وقطاعٍ وتقنية.</p>
+    </div>
+
+    <div class="explorer reveal">
+      <!-- 3D STAGE -->
+      <div class="stagecard">
+        <div class="stagebtns">
+          <button class="sbtn" id="spin" aria-pressed="false">تدوير تلقائي</button>
+          <button class="sbtn" id="reset">إعادة الزاوية</button>
+        </div>
+        <div class="stage" id="stage">
+          <div class="scene" id="scene">
+            <div class="origin" id="origin"></div>
+          </div>
+          <div class="stagehint">↻ اسحب للتدوير</div>
+        </div>
+      </div>
+
+      <!-- PANEL -->
+      <div class="panel">
+        <div class="legend">
+          <div class="legrow x"><span class="swatch"></span><span class="ax">X · NIS</span><span class="name">النظام الوطني</span><span class="q">أين؟</span></div>
+          <div class="legrow y"><span class="swatch"></span><span class="ax">Y · SSI</span><span class="name">النظام القطاعي</span><span class="q">أي قطاع؟</span></div>
+          <div class="legrow z"><span class="swatch"></span><span class="ax">Z · TIS</span><span class="name">النظام التكنولوجي</span><span class="q">أي تقنية؟</span></div>
+        </div>
+        <div>
+          <div class="sectitle">أمثلة تطبيقية — اختر إحداثيًّا</div>
+          <div class="examples" id="examples"></div>
+        </div>
+        <div class="readout" id="readout"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AXES ===================== -->
+<section class="section" id="axes">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">The Three Lenses</span>
+      <h2>ثلاثة أنظمة مستقلة، لا تكرارٌ لبعضها</h2>
+      <p>قوة الإطار تكمن في فصل المحاور: تثبيت محورَين وتغيير الثالث يَعزل أثر كل نظام على حِدة، فتتضح مصادر القوة والضعف في أي نشاط ابتكاري.</p>
+    </div>
+    <div class="axis-grid">
+      <article class="axis-card x reveal">
+        <span class="badge">X · NIS</span>
+        <h3>النظام الوطني للابتكار</h3>
+        <div class="q">السؤال: أين يحدث الابتكار؟</div>
+        <p>الإطار المؤسسي والسياسي والتمويلي داخل حدود الدولة: الجامعات، مراكز البحث، التشريعات، رأس المال، والثقافة. هو الذي يُحدّد البيئة الحاضنة التي تجري فيها كل الأنشطة.</p>
+        <div class="tags"><span class="tag">السعودية</span><span class="tag">الإمارات</span><span class="tag">ألمانيا</span></div>
+      </article>
+      <article class="axis-card y reveal">
+        <span class="badge">Y · SSI</span>
+        <h3>النظام القطاعي للابتكار</h3>
+        <div class="q">السؤال: في أي قطاع؟</div>
+        <p>قاعدة المعرفة وديناميكيات الطلب والفاعلون الخاصّون بقطاعٍ بعينه. منطق الابتكار في الصحة يختلف جذريًا عنه في الطاقة أو الزراعة، حتى داخل الدولة نفسها.</p>
+        <div class="tags"><span class="tag">الصحة</span><span class="tag">الطاقة</span><span class="tag">النقل</span><span class="tag">الزراعة</span></div>
+      </article>
+      <article class="axis-card z reveal">
+        <span class="badge">Z · TIS</span>
+        <h3>النظام التكنولوجي للابتكار</h3>
+        <div class="q">السؤال: حول أي تقنية؟</div>
+        <p>الشبكة العالمية من الفاعلين والمعارف المتمحورة حول تقنيةٍ واحدة. هو البُعد المتعامد الحقيقي: التقنية تعبر حدود الدول والقطاعات معًا فتُكمل النموذج بدلًا من تكراره.</p>
+        <div class="tags"><span class="tag">ذكاء اصطناعي</span><span class="tag">هيدروجين أخضر</span><span class="tag">تقنية حيوية</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FUNCTIONS ===================== -->
+<section class="section" id="functions">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Seven Functions · TIS</span>
+      <h2>الوظائف السبع التي تقيس صحة الخليّة</h2>
+      <p>لكل خليّة في المكعب، تُشخّص الوظائف السبع للنظام التكنولوجي قوّتها وثغراتها — أين يتعثّر النشاط الابتكاري ولماذا.</p>
+    </div>
+    <div class="func-grid">
+      <div class="func reveal"><div class="num">F1</div><h4>أنشطة المعرفة</h4><p>توليد المعرفة العلمية والتقنية ونشرها عبر البحث والتطوير والتعلّم.</p></div>
+      <div class="func reveal"><div class="num">F2</div><h4>تطوير المعرفة وتبادلها</h4><p>تدفّق المعرفة بين الفاعلين عبر الشبكات والتعاون والتحالفات.</p></div>
+      <div class="func reveal"><div class="num">F3</div><h4>توجيه البحث</h4><p>تشكيل التوقّعات والرؤى التي تُوجّه استثمارات وجهود الفاعلين نحو مسارٍ تقني.</p></div>
+      <div class="func reveal"><div class="num">F4</div><h4>ريادة التجريب</h4><p>دخول روّاد الأعمال وتجربة التطبيقات الحقيقية التي تختبر جدوى التقنية.</p></div>
+      <div class="func reveal"><div class="num">F5</div><h4>خلق الأسواق</h4><p>تكوين مساحات طلبٍ أولية وأسواق مُتخصّصة تحتضن التقنية الناشئة.</p></div>
+      <div class="func reveal"><div class="num">F6</div><h4>تعبئة الموارد</h4><p>توفير رأس المال والكفاءات والبنية التحتية اللازمة للنمو.</p></div>
+      <div class="func reveal"><div class="num">F7</div><h4>تكوين الشرعية</h4><p>بناء القبول المؤسسي والاجتماعي ومواجهة مقاومة الوضع القائم.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== METHOD ===================== -->
+<section class="section" id="method">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">How To Read It</span>
+      <h2>كيف تقرأ المكعب في ثلاث خطوات</h2>
+      <p>الإطار أداةُ تشخيصٍ عملية: حدّد الخليّة، اعزل المتغيّر، ثم شخّص الوظائف.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h4>حدّد الإحداثي</h4><p>اختر الدولة (X) والقطاع (Y) والتقنية (Z). تقاطعها يُعطيك خليّةً واحدة تمثّل نشاطًا ابتكاريًا محددًا تمامًا.</p></div>
+      <div class="step reveal"><h4>اعزل المتغيّر</h4><p>ثبّت محورَين وغيّر الثالث. مقارنة خليّتين على نفس محورَي Y وZ تعزل أثر النظام الوطني وحده.</p></div>
+      <div class="step reveal"><h4>شخّص الوظائف</h4><p>قِس الوظائف السبع للنظام التكنولوجي في تلك الخليّة لتكتشف أين تتركّز الثغرات وما الذي يحتاج تدخلًا.</p></div>
+    </div>
+
+    <div class="cta-band reveal">
+      <h2>التقنية هي البُعد المتعامد الحقيقي</h2>
+      <p>المحور Z (النظام التكنولوجي) يعبر حدود الدول والقطاعات معًا، فيُكمل النموذج بدلًا من تكراره — وهذه هي قوة الفصل بين المحاور الثلاثة.</p>
+      <div class="hero-actions">
+        <a href="#explorer" class="btn btn-primary">عُد إلى المكعب التفاعلي</a>
+        <a href="#axes" class="btn btn-ghost">راجع المحاور</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="cube"></span><span>مكعب أنظمة الابتكار</span></a>
+        <p>إطارٌ تحليليٌّ يَصِف الابتكار كإحداثيٍّ ثلاثي الأبعاد عند تقاطع الأنظمة الوطنية والقطاعية والتكنولوجية.</p>
+      </div>
+      <div class="foot-col">
+        <h5>المحاور</h5>
+        <a href="#axes">X · النظام الوطني (NIS)</a>
+        <a href="#axes">Y · النظام القطاعي (SSI)</a>
+        <a href="#axes">Z · النظام التكنولوجي (TIS)</a>
+      </div>
+      <div class="foot-col">
+        <h5>روابط</h5>
+        <a href="#explorer">المستكشف التفاعلي</a>
+        <a href="#functions">الوظائف السبع</a>
+        <a href="#method">المنهجية</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> مكعب أنظمة الابتكار — جميع الحقوق محفوظة.</span>
+      <span class="note">المحور Z (النظام التكنولوجي) هو البُعد المتعامد الحقيقي: التقنية تعبر حدود الدول والقطاعات معًا، فتُكمل النموذج بدلًا من تكراره.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="العودة إلى الأعلى">↑</button>
+
+<script>
+/* =========================================================
+   Interactive 3D Innovation Systems Cube
+   NIS (X) × SSI (Y) × TIS (Z)
+   ========================================================= */
+(function(){
+  "use strict";
+  const L = 200;                 // axis length (px)
+
+  // ---- categories per axis ----
+  const NIS = ["السعودية","الإمارات","ألمانيا"];                       // X
+  const SSI = ["الصحة","الطاقة","النقل","الزراعة"];                     // Y (up)
+  const TIS = ["ذكاء اصطناعي","هيدروجين أخضر","تقنية حيوية"];           // Z (toward viewer)
+
+  const tickPos = (i,n)=> (i+1)/(n+1)*L;   // position of category i along its axis
+
+  // ---- real examples: [nisIdx, ssiIdx, tisIdx, title, narrative] ----
+  const EX = [
+    [0,0,0,"الذكاء الاصطناعي في القطاع الصحي السعودي",
+      "خليّة عند تقاطع <b>السعودية × الصحة × الذكاء الاصطناعي</b>. هنا تتفاعل سياسات وزارة الصحة وهيئة البيانات (NIS) مع قاعدة معرفة القطاع الصحي (SSI) مع مسار نضج تقنية الذكاء الاصطناعي العابر للحدود (TIS). وظائف TIS السبع — كتعبئة الموارد وخلق الأسواق — تقيس صحة هذه الخليّة تحديدًا."],
+    [0,1,1,"الهيدروجين الأخضر في قطاع الطاقة السعودي",
+      "تقاطع <b>السعودية × الطاقة × الهيدروجين الأخضر</b>؛ مشروع نيوم نموذجٌ حيّ. القطاع راسخ (SSI ناضج) لكن التقنية ناشئة عالميًا (TIS في طور التشكّل)، فيتركّز التشخيص على توجيه البحث وتكوين الشرعية."],
+    [1,3,2,"التقنية الحيوية في الزراعة الإماراتية",
+      "تقاطع <b>الإمارات × الزراعة × التقنية الحيوية</b>. تغيير الإحداثي الوطني (X) وحده يكشف كيف تختلف المنظومة ذاتها باختلاف السياسات والبنية المؤسسية، رغم ثبات القطاع والتقنية تقريبًا."],
+    [2,2,0,"الذكاء الاصطناعي في النقل الألماني",
+      "تقاطع <b>ألمانيا × النقل × الذكاء الاصطناعي</b>. مقارنة هذه الخليّة بالخليّة السعودية على نفس محوري Y وZ تعزل أثر <b>النظام الوطني</b> منفردًا — وهذه هي قوة الفصل بين المحاور."]
+  ];
+
+  const origin = document.getElementById('origin');
+  const scene  = document.getElementById('scene');
+  const stage  = document.getElementById('stage');
+  if(!origin || !scene || !stage) return;
+
+  const billboards = []; // {el, get} -> always face camera
+  let rx = -20, ry = -36;
+
+  function el(cls, parent){ const d=document.createElement('div'); d.className=cls; (parent||origin).appendChild(d); return d; }
+
+  // base transform helper (y is "up" amount; CSS up = negative)
+  function place(node, x, y, z){ return `translate3d(${x}px,${-y}px,${z}px)`; }
+
+  // ---------- build axes ----------
+  function axis(cls, rot, labelAr, labelCode){
+    const b = el('bar '+cls); b.style.width = L+'px'; b.style.transform = rot;
+    const tip = el('tip '+cls);
+    const color = cls==='x'?'#22d3ee':cls==='y'?'#fbbf24':'#c084fc';
+    tip.style.borderWidth='6px 0 6px 11px';
+    tip.style.borderColor=`transparent transparent transparent ${color}`;
+    tip.style.filter=`drop-shadow(0 0 6px ${color})`;
+    const tipWrap = el('', origin); tipWrap.style.position='absolute';
+    tipWrap.style.transformStyle='preserve-3d';
+    tipWrap.appendChild(tip);
+    tip.style.position='absolute'; tip.style.left='0'; tip.style.top='-6px';
+    tipWrap.style.transform = rot + ` translate3d(${L}px,0,0)`;
+    const lab = el('lbl '+cls,scene); lab.innerHTML = `<span class="code">${labelCode}</span>${labelAr}`;
+    let lx=0,ly=0,lz=0;
+    if(cls==='x'){ lx=L+30; } if(cls==='y'){ ly=L+26; } if(cls==='z'){ lz=L+30; }
+    registerBillboard(lab, lx, ly, lz, scene);
+  }
+  axis('x','rotateZ(0deg)','النظام الوطني','X · NIS');
+  axis('y','rotateZ(-90deg)','النظام القطاعي','Y · SSI');
+  axis('z','rotateY(-90deg)','النظام التكنولوجي','Z · TIS');
+
+  // ---------- floor grid (X–Z plane) ----------
+  const floor = el('floor');
+  floor.style.width=L+'px'; floor.style.height=L+'px';
+  floor.style.backgroundSize='25px 25px';
+  floor.style.transform='rotateX(90deg) scaleY(-1)';
+  floor.style.transformOrigin='0 0';
+
+  // ---------- ticks ----------
+  const tickEls = {x:[],y:[],z:[]};
+  function buildTicks(arr,axisKey){
+    arr.forEach((name,i)=>{
+      const p = tickPos(i,arr.length);
+      const t = el('tick '+axisKey,scene);
+      t.innerHTML = `<div class="dot"></div><div class="t">${name}</div>`;
+      let x=0,y=0,z=0;
+      if(axisKey==='x') x=p; if(axisKey==='y') y=p; if(axisKey==='z') z=p;
+      registerBillboard(t,x,y,z,scene);
+      tickEls[axisKey].push(t);
+    });
+  }
+  buildTicks(NIS,'x'); buildTicks(SSI,'y'); buildTicks(TIS,'z');
+
+  // ---------- marker + guides ----------
+  const marker = el('marker',scene);
+  marker.innerHTML = '<div class="halo"></div><div class="core"></div><div class="mlbl" id="mlbl"></div>';
+  const mState = {x:0,y:0,z:0};
+  registerBillboardLive(marker, ()=>mState);
+
+  let guides=[];
+  function clearGuides(){ guides.forEach(g=>g.remove()); guides=[]; }
+  function guide(rot,len,x,y,z){
+    const g = el('guide'); g.style.width=len+'px';
+    g.style.transform = place(g,x,y,z)+' '+rot;
+    guides.push(g);
+  }
+
+  // ---------- billboard system ----------
+  function registerBillboard(node, x,y,z, parent){
+    node.style.position='absolute';
+    if(parent) parent.appendChild(node);
+    billboards.push({el:node, get:()=>({x,y,z})});
+  }
+  function registerBillboardLive(node, getter){
+    billboards.push({el:node, get:getter});
+  }
+  function applyBillboards(){
+    for(const b of billboards){
+      const {x,y,z}=b.get();
+      b.el.style.transform = place(b.el,x,y,z)+` rotateY(${-ry}deg) rotateX(${-rx}deg)`;
+    }
+  }
+
+  // ---------- rotation ----------
+  function render(){
+    scene.style.transform = `translateZ(-40px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    applyBillboards();
+  }
+
+  // ---------- selection ----------
+  const examplesBox = document.getElementById('examples');
+  const readout = document.getElementById('readout');
+  let current = 0;
+
+  function chip(cls,txt){ return `<span class="chip ${cls}">${txt}</span>`; }
+
+  function buildExampleButtons(){
+    EX.forEach((e,idx)=>{
+      const [n,s,t,title] = e;
+      const btn = document.createElement('button');
+      btn.className='ex'; btn.setAttribute('aria-pressed', idx===0);
+      btn.innerHTML = `<span class="title">${title}</span>
+        <span class="coords">${chip('x',NIS[n])}${chip('y',SSI[s])}${chip('z',TIS[t])}</span>`;
+      btn.addEventListener('click',()=>select(idx));
+      examplesBox.appendChild(btn);
+    });
+  }
+
+  function highlightTicks(n,s,t){
+    tickEls.x.forEach((el,i)=>el.classList.toggle('on',i===n));
+    tickEls.y.forEach((el,i)=>el.classList.toggle('on',i===s));
+    tickEls.z.forEach((el,i)=>el.classList.toggle('on',i===t));
+  }
+
+  function select(idx){
+    current=idx;
+    const [n,s,t,title,story]=EX[idx];
+    const px=tickPos(n,NIS.length), py=tickPos(s,SSI.length), pz=tickPos(t,TIS.length);
+    mState.x=px; mState.y=py; mState.z=pz;
+    const ml = document.getElementById('mlbl');
+    if(ml) ml.textContent = title.split(' في ')[0];
+
+    clearGuides();
+    guide('rotateZ(-90deg)', py, px, 0, pz);              // vertical drop to floor
+    guide('rotateY(90deg)',  pz, px, 0, pz);              // floor -> X axis (along -z)
+    guide('rotateZ(180deg)', px, px, 0, pz);              // floor -> Z axis (along -x)
+
+    highlightTicks(n,s,t);
+    document.querySelectorAll('.ex').forEach((b,i)=>b.setAttribute('aria-pressed', i===idx));
+
+    readout.innerHTML = `<div class="rt">${title}</div>
+      <div class="rd">${story}</div>
+      <div class="formula">CELL = <span class="c">NIS:${NIS[n]}</span> × <span class="a">SSI:${SSI[s]}</span> × <span class="v">TIS:${TIS[t]}</span></div>`;
+    render();
+  }
+
+  // ---------- interaction: drag ----------
+  let drag=false, lx=0, ly=0, autoSpin=false, raf;
+  function down(e){ drag=true; autoSpin=false; spinBtn.setAttribute('aria-pressed',false);
+    const p=pt(e); lx=p.x; ly=p.y; }
+  function move(e){ if(!drag) return; const p=pt(e);
+    ry += (p.x-lx)*0.4; rx -= (p.y-ly)*0.4;
+    rx=Math.max(-85,Math.min(85,rx)); lx=p.x; ly=p.y; render(); e.preventDefault(); }
+  function up(){ drag=false; }
+  function pt(e){ const t=e.touches?e.touches[0]:e; return {x:t.clientX,y:t.clientY}; }
+
+  stage.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+  stage.addEventListener('touchstart',down,{passive:true}); stage.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',up);
+
+  // ---------- buttons ----------
+  const spinBtn=document.getElementById('spin');
+  spinBtn.addEventListener('click',()=>{ autoSpin=!autoSpin; spinBtn.setAttribute('aria-pressed',autoSpin); if(autoSpin) loop(); });
+  document.getElementById('reset').addEventListener('click',()=>{ rx=-20; ry=-36; render(); });
+  function loop(){ if(!autoSpin) return; ry+=0.35; render(); raf=requestAnimationFrame(loop); }
+
+  // ---------- init ----------
+  buildExampleButtons();
+  select(0);
+  render();
+})();
+
+</script>
+<script>
+/* =========================================================
+   Site interactions: nav, scroll reveal, progress,
+   active section, back-to-top, mobile menu
+   ========================================================= */
+(function(){
+  "use strict";
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // current year in footer
+  const y = document.getElementById('year');
+  if(y) y.textContent = new Date().getFullYear();
+
+  const nav      = document.getElementById('nav');
+  const progress = document.getElementById('scrollProgress');
+  const toTop    = document.getElementById('toTop');
+
+  // ---- scroll-driven UI (nav shadow, progress bar, back-to-top) ----
+  let ticking = false;
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(()=>{
+      const sc = window.scrollY || document.documentElement.scrollTop;
+      if(nav) nav.classList.toggle('scrolled', sc > 8);
+      if(progress){
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.transform = `scaleX(${h > 0 ? Math.min(sc / h, 1) : 0})`;
+      }
+      if(toTop) toTop.classList.toggle('show', sc > 600);
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  if(toTop){
+    toTop.addEventListener('click', ()=>{
+      window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  }
+
+  // ---- mobile menu toggle ----
+  const toggle = document.getElementById('navToggle');
+  const links  = document.getElementById('navLinks');
+  if(toggle && links){
+    toggle.addEventListener('click', ()=>{
+      const open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+    links.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=> links.classList.remove('open')));
+  }
+
+  // ---- reveal on scroll ----
+  const items = document.querySelectorAll('.reveal');
+  if(reduce || !('IntersectionObserver' in window)){
+    items.forEach(el=>el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    items.forEach(el=>io.observe(el));
+  }
+
+  // ---- active section highlight in nav ----
+  const navItems = links ? [...links.querySelectorAll('a:not(.nav-cta)')] : [];
+  const sections = navItems
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+  if(sections.length && 'IntersectionObserver' in window){
+    const spy = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const id = '#' + e.target.id;
+          navItems.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    sections.forEach(s=>spy.observe(s));
+  }
+})();
+
+</script>
+</body>
+</html>
