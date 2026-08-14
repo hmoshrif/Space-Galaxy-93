@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============ SEO ============ -->
+  <title>Nova AI — AI Agents That Run Your Operations</title>
+  <meta name="description" content="Nova AI turns your company data into autonomous AI agents that automate support, sales, and operations — deployed in minutes, secure by design." />
+  <meta name="keywords" content="AI agents, automation, AI platform, business AI, customer support automation" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <link rel="canonical" href="https://novaai.example.com/" />
+
+  <!-- ============ Open Graph / Social ============ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nova AI — AI Agents That Run Your Operations" />
+  <meta property="og:description" content="Deploy autonomous AI agents trained on your data. Automate support, sales, and operations in minutes." />
+  <meta property="og:url" content="https://novaai.example.com/" />
+  <meta property="og:image" content="https://novaai.example.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nova AI — AI Agents That Run Your Operations" />
+  <meta name="twitter:description" content="Deploy autonomous AI agents trained on your data. Automate support, sales, and operations in minutes." />
+
+  <!-- ============ Favicon (inline SVG) ============ -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%230b0f1a'/%3E%3Cpath d='M8 23V9l8 10 8-10v14' fill='none' stroke='url(%23g)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <!-- ============ Fonts ============ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <!-- ============ Structured Data (SEO) ============ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Nova AI",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#0b0f1a; --bg-soft:#111726; --card:#141b2d; --card-2:#182135;
+      --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+      --text:#eef2f9; --muted:#9aa6bf; --muted-2:#6b768f;
+      --brand:#7c5cff; --brand-2:#22d3ee; --accent:#34d399;
+      --grad:linear-gradient(135deg,#7c5cff 0%,#22d3ee 100%);
+      --grad-soft:linear-gradient(135deg,rgba(124,92,255,.16),rgba(34,211,238,.16));
+      --radius:16px; --radius-lg:24px; --shadow:0 20px 50px -20px rgba(0,0,0,.6);
+      --maxw:1160px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.6;
+      -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    }
+    html[dir="rtl"] body{font-family:'Tajawal','Inter',system-ui,sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+    section{padding:96px 0;position:relative}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+      letter-spacing:.04em;text-transform:uppercase;color:var(--brand-2);
+      background:var(--grad-soft);border:1px solid var(--line-2);
+      padding:6px 14px;border-radius:999px;margin-bottom:20px;
+    }
+    h1,h2,h3{line-height:1.15;font-weight:800;letter-spacing:-.02em}
+    h2{font-size:clamp(28px,4vw,44px)}
+    .lead{color:var(--muted);font-size:18px;max-width:620px}
+    .section-head{text-align:center;max-width:680px;margin:0 auto 56px}
+    .section-head .lead{margin:16px auto 0}
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      font-weight:600;font-size:15px;padding:13px 24px;border-radius:12px;
+      cursor:pointer;border:1px solid transparent;transition:.2s ease;white-space:nowrap;
+    }
+    .btn-primary{background:var(--grad);color:#0b0f1a;box-shadow:0 10px 30px -10px rgba(124,92,255,.6)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(124,92,255,.7)}
+    .btn-ghost{background:rgba(255,255,255,.04);border-color:var(--line-2);color:var(--text)}
+    .btn-ghost:hover{background:rgba(255,255,255,.09)}
+    .btn-lg{padding:16px 30px;font-size:16px}
+
+    /* Nav */
+    header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+      background:rgba(11,15,26,.72);border-bottom:1px solid var(--line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+    .logo .mark{width:30px;height:30px;border-radius:9px;background:var(--grad);
+      display:grid;place-items:center;color:#0b0f1a;font-weight:800}
+    .nav-links{display:flex;align-items:center;gap:30px}
+    .nav-links a{color:var(--muted);font-size:15px;font-weight:500;transition:.2s}
+    .nav-links a:hover{color:var(--text)}
+    .nav-actions{display:flex;align-items:center;gap:12px}
+    .lang-toggle{background:rgba(255,255,255,.05);border:1px solid var(--line-2);
+      color:var(--text);border-radius:10px;padding:9px 14px;font-weight:600;
+      font-size:14px;cursor:pointer;transition:.2s}
+    .lang-toggle:hover{background:rgba(255,255,255,.1)}
+    .menu-btn{display:none;background:none;border:1px solid var(--line-2);
+      border-radius:10px;padding:8px 10px;cursor:pointer}
+    .menu-btn span{display:block;width:20px;height:2px;background:var(--text);margin:4px 0}
+
+    /* Hero */
+    .hero{padding:80px 0 60px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(60% 50% at 50% 0%,rgba(124,92,255,.22),transparent 70%),
+                 radial-gradient(40% 40% at 80% 20%,rgba(34,211,238,.15),transparent 70%)}
+    .hero h1{font-size:clamp(34px,6vw,64px);max-width:900px;margin:22px auto 0}
+    .hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero .lead{margin:22px auto 0;font-size:clamp(17px,2.2vw,20px)}
+    .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+    .trust-line{margin-top:22px;color:var(--muted-2);font-size:14px;display:flex;
+      gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+    .trust-line svg{color:var(--accent)}
+
+    /* Product mockup */
+    .mockup{max-width:960px;margin:56px auto 0;border-radius:var(--radius-lg);
+      border:1px solid var(--line-2);background:linear-gradient(180deg,var(--card-2),var(--card));
+      box-shadow:var(--shadow);overflow:hidden}
+    .mockup-bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line)}
+    .dot{width:11px;height:11px;border-radius:50%}
+    .mockup-body{display:grid;grid-template-columns:200px 1fr;min-height:320px}
+    .mk-side{border-inline-end:1px solid var(--line);padding:18px 16px;background:rgba(0,0,0,.15)}
+    .mk-side .item{height:12px;border-radius:6px;background:rgba(255,255,255,.06);margin-bottom:14px}
+    .mk-side .item.active{background:var(--grad-soft);border:1px solid var(--line-2)}
+    .mk-main{padding:24px}
+    .mk-row{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+    .mk-stat{flex:1;min-width:120px;background:var(--card-2);border:1px solid var(--line);
+      border-radius:12px;padding:16px}
+    .mk-stat b{font-size:24px;display:block;background:var(--grad);-webkit-background-clip:text;
+      background-clip:text;color:transparent}
+    .mk-stat span{font-size:12px;color:var(--muted)}
+    .mk-chart{height:150px;background:
+      linear-gradient(180deg,rgba(124,92,255,.18),transparent),
+      var(--card-2);border:1px solid var(--line);border-radius:12px;
+      position:relative;overflow:hidden;display:flex;align-items:flex-end;gap:8px;padding:16px}
+    .bar{flex:1;background:var(--grad);border-radius:6px 6px 0 0;opacity:.85}
+
+    /* Logos */
+    .logos{padding:48px 0}
+    .logos p{text-align:center;color:var(--muted-2);font-size:13px;
+      text-transform:uppercase;letter-spacing:.08em;margin-bottom:26px}
+    .logo-row{display:flex;justify-content:center;align-items:center;gap:48px;flex-wrap:wrap;opacity:.75}
+    .logo-row span{font-weight:700;font-size:20px;color:var(--muted);letter-spacing:-.01em}
+
+    /* Features */
+    .grid{display:grid;gap:22px}
+    .features .grid{grid-template-columns:repeat(3,1fr)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+      padding:28px;transition:.25s ease}
+    .card:hover{border-color:var(--line-2);transform:translateY(-4px);background:var(--card-2)}
+    .card .ico{width:46px;height:46px;border-radius:12px;background:var(--grad-soft);
+      border:1px solid var(--line-2);display:grid;place-items:center;margin-bottom:18px;color:var(--brand-2)}
+    .card h3{font-size:19px;margin-bottom:10px}
+    .card p{color:var(--muted);font-size:15px}
+
+    /* How it works */
+    .steps .grid{grid-template-columns:repeat(3,1fr)}
+    .step{position:relative;padding-top:8px}
+    .step .num{width:44px;height:44px;border-radius:12px;background:var(--grad);
+      color:#0b0f1a;font-weight:800;display:grid;place-items:center;font-size:18px;margin-bottom:18px}
+    .step h3{font-size:19px;margin-bottom:8px}
+    .step p{color:var(--muted);font-size:15px}
+
+    /* Stats band */
+    .stats{background:linear-gradient(180deg,var(--bg-soft),var(--bg));
+      border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .stats .grid{grid-template-columns:repeat(4,1fr);text-align:center}
+    .stat b{font-size:clamp(32px,5vw,48px);font-weight:800;background:var(--grad);
+      -webkit-background-clip:text;background-clip:text;color:transparent}
+    .stat span{color:var(--muted);font-size:15px}
+
+    /* Pricing */
+    .pricing .grid{grid-template-columns:repeat(3,1fr);align-items:stretch}
+    .price-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+      padding:32px;display:flex;flex-direction:column}
+    .price-card.popular{border-color:var(--brand);background:var(--card-2);
+      box-shadow:0 30px 60px -30px rgba(124,92,255,.5);position:relative}
+    .badge-pop{position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(-50%);
+      background:var(--grad);color:#0b0f1a;font-size:12px;font-weight:700;padding:5px 14px;border-radius:999px}
+    html[dir="rtl"] .badge-pop{transform:translateX(50%)}
+    .price-card h3{font-size:20px}
+    .price-card .price{font-size:44px;font-weight:800;margin:14px 0 4px}
+    .price-card .price span{font-size:16px;color:var(--muted);font-weight:500}
+    .price-card .desc{color:var(--muted);font-size:14px;margin-bottom:22px;min-height:42px}
+    .price-card ul{list-style:none;margin:0 0 26px;display:grid;gap:12px}
+    .price-card li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:var(--text)}
+    .price-card li svg{color:var(--accent);flex-shrink:0;margin-top:3px}
+    .price-card .btn{margin-top:auto;width:100%}
+
+    /* Testimonials */
+    .testi .grid{grid-template-columns:repeat(3,1fr)}
+    .quote{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+    .quote p{font-size:15px;color:var(--text);margin-bottom:20px}
+    .who{display:flex;align-items:center;gap:12px}
+    .avatar{width:44px;height:44px;border-radius:50%;background:var(--grad);
+      display:grid;place-items:center;font-weight:700;color:#0b0f1a}
+    .who b{font-size:14px;display:block}
+    .who span{font-size:13px;color:var(--muted)}
+    .stars{color:#fbbf24;margin-bottom:14px;font-size:14px;letter-spacing:2px}
+
+    /* FAQ */
+    .faq-list{max-width:760px;margin:0 auto;display:grid;gap:14px}
+    .faq-item{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .faq-q{width:100%;text-align:start;background:none;border:none;color:var(--text);
+      font-size:16px;font-weight:600;padding:20px 22px;cursor:pointer;display:flex;
+      justify-content:space-between;align-items:center;gap:16px;font-family:inherit}
+    .faq-q .chev{transition:.3s;color:var(--muted);flex-shrink:0}
+    .faq-item.open .chev{transform:rotate(180deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted);font-size:15px}
+    .faq-a div{padding:0 22px 20px}
+
+    /* Final CTA */
+    .cta-final{text-align:center}
+    .cta-box{background:var(--grad-soft);border:1px solid var(--line-2);
+      border-radius:var(--radius-lg);padding:64px 32px;position:relative;overflow:hidden}
+    .cta-box::before{content:"";position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(50% 80% at 50% 0%,rgba(124,92,255,.25),transparent 70%)}
+    .cta-box h2{margin-bottom:16px}
+    .cta-box .lead{margin:0 auto 30px}
+    .newsletter{display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap}
+    .newsletter input{flex:1;min-width:200px;background:rgba(0,0,0,.3);border:1px solid var(--line-2);
+      color:var(--text);border-radius:12px;padding:14px 16px;font-size:15px;font-family:inherit;outline:none}
+    .newsletter input:focus{border-color:var(--brand)}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line);padding:64px 0 36px;background:var(--bg-soft)}
+    .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px}
+    .foot-col h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;
+      color:var(--muted-2);margin-bottom:16px}
+    .foot-col a{display:block;color:var(--muted);font-size:14.5px;margin-bottom:11px;transition:.2s}
+    .foot-col a:hover{color:var(--text)}
+    .foot-brand p{color:var(--muted);font-size:14px;margin:14px 0 18px;max-width:280px}
+    .socials{display:flex;gap:12px}
+    .socials a{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);
+      display:grid;place-items:center;color:var(--muted);transition:.2s}
+    .socials a:hover{color:var(--text);border-color:var(--brand);background:rgba(124,92,255,.1)}
+    .foot-bottom{border-top:1px solid var(--line);padding-top:26px;display:flex;
+      justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+      color:var(--muted-2);font-size:13.5px}
+    .foot-bottom a{color:var(--muted-2)}
+    .foot-bottom a:hover{color:var(--text)}
+
+    /* Reveal on scroll */
+    .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+    .reveal.in{opacity:1;transform:none}
+
+    /* Mobile */
+    @media (max-width:900px){
+      .features .grid,.steps .grid,.pricing .grid,.testi .grid{grid-template-columns:1fr}
+      .stats .grid{grid-template-columns:repeat(2,1fr);gap:32px}
+      .foot-grid{grid-template-columns:1fr 1fr}
+      .mockup-body{grid-template-columns:1fr}
+      .mk-side{display:none}
+      .nav-links{display:none;position:absolute;top:68px;inset-inline:0;flex-direction:column;
+        background:var(--bg-soft);border-bottom:1px solid var(--line);padding:20px 24px;gap:18px}
+      .nav-links.show{display:flex}
+      .menu-btn{display:block}
+      .nav-links a{font-size:16px}
+      section{padding:72px 0}
+    }
+    @media (max-width:520px){
+      .stats .grid,.foot-grid{grid-template-columns:1fr}
+      .foot-bottom{flex-direction:column;text-align:center}
+    }
+    /* Accessibility */
+    :focus-visible{outline:2px solid var(--brand-2);outline-offset:3px;border-radius:6px}
+    @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+
+  <!-- ================= NAV ================= -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="logo" href="#top" aria-label="Nova AI home">
+        <span class="mark">N</span> Nova<span style="color:var(--brand-2)">AI</span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Main">
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" aria-label="Switch language">العربية</button>
+        <a href="#" class="btn btn-ghost" style="padding:9px 16px" data-i18n="nav.signin">Sign in</a>
+        <a href="#pricing" class="btn btn-primary" style="padding:9px 18px" data-i18n="nav.cta">Get started</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow reveal">🚀 <span data-i18n="hero.eyebrow">Now in public beta</span></span>
+        <h1 class="reveal" data-i18n-html="hero.title">
+          Deploy <span class="grad">AI agents</span> that run your operations
+        </h1>
+        <p class="lead reveal" data-i18n="hero.lead">
+          Nova AI turns your company data into autonomous agents that automate support,
+          sales, and back-office work — live in minutes, secure by design.
+        </p>
+        <div class="hero-cta reveal">
+          <a href="#pricing" class="btn btn-primary btn-lg" data-i18n="hero.cta1">Start free trial</a>
+          <a href="#how" class="btn btn-ghost btn-lg" data-i18n="hero.cta2">See how it works</a>
+        </div>
+        <div class="trust-line reveal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+          <span data-i18n="hero.trust">No credit card required · SOC 2 compliant · Cancel anytime</span>
+        </div>
+
+        <!-- Product mockup -->
+        <div class="mockup reveal" aria-hidden="true">
+          <div class="mockup-bar">
+            <span class="dot" style="background:#ff5f57"></span>
+            <span class="dot" style="background:#febc2e"></span>
+            <span class="dot" style="background:#28c840"></span>
+          </div>
+          <div class="mockup-body">
+            <div class="mk-side">
+              <div class="item active"></div><div class="item"></div>
+              <div class="item"></div><div class="item"></div><div class="item"></div>
+            </div>
+            <div class="mk-main">
+              <div class="mk-row">
+                <div class="mk-stat"><b>98.4%</b><span data-i18n="mk.resolved">Auto-resolved</span></div>
+                <div class="mk-stat"><b>1.2s</b><span data-i18n="mk.response">Avg response</span></div>
+                <div class="mk-stat"><b>24/7</b><span data-i18n="mk.uptime">Always on</span></div>
+              </div>
+              <div class="mk-chart">
+                <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div>
+                <div class="bar" style="height:50%"></div><div class="bar" style="height:80%"></div>
+                <div class="bar" style="height:72%"></div><div class="bar" style="height:95%"></div>
+                <div class="bar" style="height:60%"></div><div class="bar" style="height:88%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LOGOS ================= -->
+    <section class="logos">
+      <div class="wrap">
+        <p data-i18n="logos.title">Trusted by forward-thinking teams</p>
+        <div class="logo-row">
+          <span>Acme Corp</span><span>Northwind</span><span>Globex</span>
+          <span>Initech</span><span>Umbrella</span><span>Hooli</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="features" id="features">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="features.eyebrow">Capabilities</span>
+          <h2 data-i18n="features.title">Everything you need to automate with AI</h2>
+          <p class="lead" data-i18n="features.lead">Powerful out of the box, customizable to your workflows — no ML team required.</p>
+        </div>
+        <div class="grid">
+          <div class="card reveal">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg></div>
+            <h3 data-i18n="feat.1.t">Trained on your data</h3>
+            <p data-i18n="feat.1.d">Connect docs, tickets, and databases. Agents answer with your knowledge, not guesses.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+            <h3 data-i18n="feat.2.t">Live in minutes</h3>
+            <p data-i18n="feat.2.d">No-code builder and ready templates. Launch your first agent before lunch.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <h3 data-i18n="feat.3.t">Secure by design</h3>
+            <p data-i18n="feat.3.d">SOC 2, encryption at rest and in transit, and full data residency controls.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+            <h3 data-i18n="feat.4.t">Insights &amp; analytics</h3>
+            <p data-i18n="feat.4.d">See resolution rates, deflection, and ROI in a real-time dashboard.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+            <h3 data-i18n="feat.5.t">100+ integrations</h3>
+            <p data-i18n="feat.5.d">Slack, Zendesk, Salesforce, HubSpot, and any REST API via webhooks.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg></div>
+            <h3 data-i18n="feat.6.t">Human handoff</h3>
+            <p data-i18n="feat.6.d">Agents escalate to your team seamlessly with full context — never a dead end.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HOW IT WORKS ================= -->
+    <section class="steps" id="how">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="how.eyebrow">How it works</span>
+          <h2 data-i18n="how.title">From zero to autonomous in 3 steps</h2>
+        </div>
+        <div class="grid">
+          <div class="step reveal">
+            <div class="num">1</div>
+            <h3 data-i18n="how.1.t">Connect your data</h3>
+            <p data-i18n="how.1.d">Upload documents or connect your tools. Nova indexes everything securely in minutes.</p>
+          </div>
+          <div class="step reveal">
+            <div class="num">2</div>
+            <h3 data-i18n="how.2.t">Configure your agent</h3>
+            <p data-i18n="how.2.d">Set tone, guardrails, and actions with a visual builder — no code needed.</p>
+          </div>
+          <div class="step reveal">
+            <div class="num">3</div>
+            <h3 data-i18n="how.3.t">Deploy anywhere</h3>
+            <p data-i18n="how.3.d">Embed on your site, Slack, or WhatsApp. Monitor and improve from one dashboard.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STATS ================= -->
+    <section class="stats">
+      <div class="wrap">
+        <div class="grid">
+          <div class="stat reveal"><b>4M+</b><span data-i18n="stat.1">Conversations automated</span></div>
+          <div class="stat reveal"><b>70%</b><span data-i18n="stat.2">Avg cost reduction</span></div>
+          <div class="stat reveal"><b>99.9%</b><span data-i18n="stat.3">Platform uptime</span></div>
+          <div class="stat reveal"><b>12min</b><span data-i18n="stat.4">Avg time to launch</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRICING ================= -->
+    <section class="pricing" id="pricing">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="pricing.eyebrow">Pricing</span>
+          <h2 data-i18n="pricing.title">Simple, transparent pricing</h2>
+          <p class="lead" data-i18n="pricing.lead">Start free. Upgrade as you grow. No hidden fees.</p>
+        </div>
+        <div class="grid">
+          <div class="price-card reveal">
+            <h3 data-i18n="plan.1.name">Starter</h3>
+            <div class="price">$0<span data-i18n="plan.mo">/mo</span></div>
+            <p class="desc" data-i18n="plan.1.desc">For individuals exploring AI automation.</p>
+            <ul>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.1.f1">1 AI agent</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.1.f2">500 messages / month</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.1.f3">Community support</span></li>
+            </ul>
+            <a href="#" class="btn btn-ghost" data-i18n="plan.1.cta">Start free</a>
+          </div>
+          <div class="price-card popular reveal">
+            <span class="badge-pop" data-i18n="plan.popular">Most popular</span>
+            <h3 data-i18n="plan.2.name">Growth</h3>
+            <div class="price">$99<span data-i18n="plan.mo">/mo</span></div>
+            <p class="desc" data-i18n="plan.2.desc">For growing teams automating real workflows.</p>
+            <ul>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.2.f1">10 AI agents</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.2.f2">25,000 messages / month</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.2.f3">All integrations</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.2.f4">Priority support</span></li>
+            </ul>
+            <a href="#" class="btn btn-primary" data-i18n="plan.2.cta">Start free trial</a>
+          </div>
+          <div class="price-card reveal">
+            <h3 data-i18n="plan.3.name">Enterprise</h3>
+            <div class="price" data-i18n="plan.3.price">Custom</div>
+            <p class="desc" data-i18n="plan.3.desc">For organizations with advanced security needs.</p>
+            <ul>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.3.f1">Unlimited agents &amp; volume</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.3.f2">SSO, SAML &amp; audit logs</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.3.f3">Dedicated success manager</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg><span data-i18n="plan.3.f4">99.9% SLA &amp; data residency</span></li>
+            </ul>
+            <a href="#" class="btn btn-ghost" data-i18n="plan.3.cta">Contact sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TESTIMONIALS ================= -->
+    <section class="testi">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="testi.eyebrow">Testimonials</span>
+          <h2 data-i18n="testi.title">Loved by teams that ship fast</h2>
+        </div>
+        <div class="grid">
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p data-i18n="testi.1.q">"We cut support response time by 80% in the first week. Nova paid for itself in a month."</p>
+            <div class="who"><div class="avatar">SA</div><div><b>Sara Al-Amin</b><span data-i18n="testi.1.r">Head of CX, Northwind</span></div></div>
+          </div>
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p data-i18n="testi.2.q">"Setup took 15 minutes. The no-code builder let our ops team ship agents without engineering."</p>
+            <div class="who"><div class="avatar">MK</div><div><b>Marco Klein</b><span data-i18n="testi.2.r">COO, Globex</span></div></div>
+          </div>
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p data-i18n="testi.3.q">"Security review passed on the first try. SOC 2 and data residency were dealbreakers — Nova nailed both."</p>
+            <div class="who"><div class="avatar">LN</div><div><b>Lena Novak</b><span data-i18n="testi.3.r">CISO, Initech</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section id="faq">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" data-i18n="faq.eyebrow">FAQ</span>
+          <h2 data-i18n="faq.title">Frequently asked questions</h2>
+        </div>
+        <div class="faq-list" id="faqList">
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false"><span data-i18n="faq.1.q">How long does it take to get started?</span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="faq-a"><div data-i18n="faq.1.a">Most teams launch their first agent in under 15 minutes using our templates and no-code builder.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false"><span data-i18n="faq.2.q">Is my data used to train shared models?</span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="faq-a"><div data-i18n="faq.2.a">Never. Your data is isolated to your workspace, encrypted, and never used to train models for other customers.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false"><span data-i18n="faq.3.q">Do I need engineers to use Nova?</span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="faq-a"><div data-i18n="faq.3.a">No. The visual builder is designed for non-technical teams. Developers can go further with our API and webhooks.</div></div>
+          </div>
+          <div class="faq-item reveal">
+            <button class="faq-q" aria-expanded="false"><span data-i18n="faq.4.q">Can I cancel anytime?</span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="faq-a"><div data-i18n="faq.4.a">Yes. Plans are month-to-month with no lock-in. Cancel or change your plan whenever you like.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FINAL CTA ================= -->
+    <section class="cta-final">
+      <div class="wrap">
+        <div class="cta-box reveal">
+          <h2 data-i18n="cta.title">Ready to put your operations on autopilot?</h2>
+          <p class="lead" data-i18n="cta.lead">Join thousands of teams automating with Nova AI. Start free — no credit card required.</p>
+          <form class="newsletter" id="newsletter" novalidate>
+            <input type="email" required placeholder="you@company.com" aria-label="Work email" id="emailInput" />
+            <button type="submit" class="btn btn-primary" data-i18n="cta.btn">Get started</button>
+          </form>
+          <p id="formMsg" style="margin-top:14px;color:var(--accent);font-size:14px;min-height:20px" role="status"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-col foot-brand">
+          <a class="logo" href="#top"><span class="mark">N</span> Nova<span style="color:var(--brand-2)">AI</span></a>
+          <p data-i18n="foot.tagline">Autonomous AI agents that run your operations, securely.</p>
+          <div class="socials">
+            <a href="#" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.5 8.6L23 22h-6.8l-5.3-7-6.1 7H2l8-9.2L1.5 2h7l4.8 6.4L18.9 2Zm-2.4 18h1.9L7.6 4H5.6l10.9 16Z"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0 0-5ZM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg></a>
+            <a href="#" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.4-2.2-.2-4.5-1.1-4.5-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.3.2 2.3.1 2.6.6.7 1 1.6 1 2.7 0 3.8-2.3 4.7-4.5 4.9.3.3.6.9.6 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2Z"/></svg></a>
+          </div>
+        </div>
+        <div class="foot-col">
+          <h4 data-i18n="foot.product">Product</h4>
+          <a href="#features" data-i18n="nav.features">Features</a>
+          <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+          <a href="#" data-i18n="foot.integrations">Integrations</a>
+          <a href="#" data-i18n="foot.changelog">Changelog</a>
+        </div>
+        <div class="foot-col">
+          <h4 data-i18n="foot.company">Company</h4>
+          <a href="#" data-i18n="foot.about">About</a>
+          <a href="#" data-i18n="foot.blog">Blog</a>
+          <a href="#" data-i18n="foot.careers">Careers</a>
+          <a href="#" data-i18n="foot.contact">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h4 data-i18n="foot.legal">Legal</h4>
+          <a href="#" data-i18n="foot.privacy">Privacy Policy</a>
+          <a href="#" data-i18n="foot.terms">Terms of Service</a>
+          <a href="#" data-i18n="foot.security">Security</a>
+          <a href="#" data-i18n="foot.status">Status</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span data-i18n="foot.copy">© 2026 Nova AI, Inc. All rights reserved.</span>
+        <span data-i18n="foot.made">Built for teams who move fast.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  /* ============ i18n (EN / AR) ============ */
+  const I18N = {
+    ar: {
+      "nav.features":"المزايا","nav.how":"كيف يعمل","nav.pricing":"الأسعار","nav.faq":"الأسئلة",
+      "nav.signin":"تسجيل الدخول","nav.cta":"ابدأ الآن",
+      "hero.eyebrow":"متاح الآن كنسخة تجريبية عامة",
+      "hero.title":"أطلق <span class='grad'>وكلاء ذكاء اصطناعي</span> يديرون عملياتك",
+      "hero.lead":"نوفا يحوّل بيانات شركتك إلى وكلاء مستقلين يؤتمتون الدعم والمبيعات والأعمال الخلفية — يعملون خلال دقائق وبأمانٍ مصمّم من الأساس.",
+      "hero.cta1":"ابدأ تجربة مجانية","hero.cta2":"شاهد كيف يعمل",
+      "hero.trust":"بدون بطاقة ائتمان · متوافق مع SOC 2 · ألغِ في أي وقت",
+      "mk.resolved":"حُلّت تلقائياً","mk.response":"متوسط الرد","mk.uptime":"دائماً يعمل",
+      "logos.title":"موثوق من فرقٍ استشرافية",
+      "features.eyebrow":"الإمكانات","features.title":"كل ما تحتاجه للأتمتة بالذكاء الاصطناعي",
+      "features.lead":"جاهز للعمل فوراً وقابل للتخصيص حسب سير عملك — دون فريق تعلّم آلي.",
+      "feat.1.t":"مدرَّب على بياناتك","feat.1.d":"اربط المستندات والتذاكر وقواعد البيانات. يجيب الوكلاء بمعرفتك لا بالتخمين.",
+      "feat.2.t":"يعمل خلال دقائق","feat.2.d":"منشئ بدون كود وقوالب جاهزة. أطلق أول وكيل قبل الغداء.",
+      "feat.3.t":"آمن بالتصميم","feat.3.d":"SOC 2، تشفير أثناء التخزين والنقل، وتحكّم كامل بموقع البيانات.",
+      "feat.4.t":"رؤى وتحليلات","feat.4.d":"تابع معدلات الحل والتحويل والعائد على الاستثمار في لوحة فورية.",
+      "feat.5.t":"أكثر من 100 تكامل","feat.5.d":"Slack وZendesk وSalesforce وHubSpot وأي واجهة REST عبر الويبهوك.",
+      "feat.6.t":"تحويل للبشر","feat.6.d":"يصعّد الوكلاء للفريق بسلاسة مع السياق الكامل — لا طريق مسدود أبداً.",
+      "how.eyebrow":"كيف يعمل","how.title":"من الصفر إلى الاستقلالية في 3 خطوات",
+      "how.1.t":"اربط بياناتك","how.1.d":"ارفع المستندات أو اربط أدواتك. يفهرس نوفا كل شيء بأمان خلال دقائق.",
+      "how.2.t":"اضبط وكيلك","how.2.d":"حدّد النبرة والضوابط والإجراءات عبر منشئ مرئي — دون أي كود.",
+      "how.3.t":"انشر في أي مكان","how.3.d":"ضمّنه في موقعك أو Slack أو واتساب. راقب وطوّر من لوحة واحدة.",
+      "stat.1":"محادثة مؤتمتة","stat.2":"متوسط خفض التكلفة","stat.3":"جهوزية المنصة","stat.4":"متوسط زمن الإطلاق",
+      "pricing.eyebrow":"الأسعار","pricing.title":"تسعير بسيط وشفّاف","pricing.lead":"ابدأ مجاناً. ترقّ مع نموّك. بدون رسوم خفية.",
+      "plan.mo":"/شهرياً","plan.popular":"الأكثر شيوعاً",
+      "plan.1.name":"المبتدئ","plan.1.desc":"للأفراد الراغبين في استكشاف الأتمتة.",
+      "plan.1.f1":"وكيل واحد","plan.1.f2":"500 رسالة / شهر","plan.1.f3":"دعم المجتمع","plan.1.cta":"ابدأ مجاناً",
+      "plan.2.name":"النمو","plan.2.desc":"للفرق النامية التي تؤتمت أعمالاً حقيقية.",
+      "plan.2.f1":"10 وكلاء","plan.2.f2":"25,000 رسالة / شهر","plan.2.f3":"جميع التكاملات","plan.2.f4":"دعم ذو أولوية","plan.2.cta":"ابدأ تجربة مجانية",
+      "plan.3.name":"المؤسسات","plan.3.price":"مخصّص","plan.3.desc":"للمؤسسات ذات احتياجات الأمان المتقدمة.",
+      "plan.3.f1":"وكلاء وحجم غير محدود","plan.3.f2":"SSO وSAML وسجلات تدقيق","plan.3.f3":"مدير نجاح مخصّص","plan.3.f4":"اتفاقية خدمة 99.9% وموقع بيانات","plan.3.cta":"تواصل مع المبيعات",
+      "testi.eyebrow":"آراء العملاء","testi.title":"محبوب من الفرق سريعة التنفيذ",
+      "testi.1.q":"«خفضنا زمن الرد على الدعم بنسبة 80% في الأسبوع الأول. نوفا سدّد تكلفته خلال شهر.»","testi.1.r":"مديرة تجربة العملاء، نورثويند",
+      "testi.2.q":"«استغرق الإعداد 15 دقيقة. مكّن المنشئ بدون كود فريق العمليات من الإطلاق دون هندسة.»","testi.2.r":"مدير العمليات، غلوبكس",
+      "testi.3.q":"«اجتزنا مراجعة الأمان من أول محاولة. SOC 2 وموقع البيانات كانا حاسمَين — ونوفا وفّرهما.»","testi.3.r":"مدير أمن المعلومات، إنيتك",
+      "faq.eyebrow":"الأسئلة الشائعة","faq.title":"الأسئلة المتكررة",
+      "faq.1.q":"كم يستغرق البدء؟","faq.1.a":"تطلق معظم الفرق أول وكيل خلال أقل من 15 دقيقة باستخدام القوالب والمنشئ بدون كود.",
+      "faq.2.q":"هل تُستخدم بياناتي لتدريب نماذج مشتركة؟","faq.2.a":"أبداً. بياناتك معزولة في مساحتك، ومشفّرة، ولا تُستخدم لتدريب نماذج لعملاء آخرين.",
+      "faq.3.q":"هل أحتاج مهندسين لاستخدام نوفا؟","faq.3.a":"لا. المنشئ المرئي مصمّم للفرق غير التقنية. ويمكن للمطوّرين التوسّع عبر واجهتنا البرمجية والويبهوك.",
+      "faq.4.q":"هل يمكنني الإلغاء في أي وقت؟","faq.4.a":"نعم. الخطط شهرية دون ارتباط. ألغِ أو غيّر خطتك متى شئت.",
+      "cta.title":"جاهز لوضع عملياتك على الطيّار الآلي؟","cta.lead":"انضم لآلاف الفرق التي تؤتمت مع نوفا. ابدأ مجاناً — دون بطاقة ائتمان.","cta.btn":"ابدأ الآن",
+      "foot.tagline":"وكلاء ذكاء اصطناعي مستقلون يديرون عملياتك بأمان.",
+      "foot.product":"المنتج","foot.integrations":"التكاملات","foot.changelog":"سجل التحديثات",
+      "foot.company":"الشركة","foot.about":"من نحن","foot.blog":"المدونة","foot.careers":"الوظائف","foot.contact":"تواصل معنا",
+      "foot.legal":"قانوني","foot.privacy":"سياسة الخصوصية","foot.terms":"شروط الخدمة","foot.security":"الأمان","foot.status":"حالة النظام",
+      "foot.copy":"© 2026 نوفا للذكاء الاصطناعي. جميع الحقوق محفوظة.","foot.made":"مبنيّ للفرق التي تتحرّك بسرعة."
+    }
+  };
+
+  const EN_CACHE = {}; // filled from DOM on first load
+  const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+
+  function cacheEnglish(){
+    $$("[data-i18n]").forEach(el=>EN_CACHE[el.dataset.i18n]=el.innerHTML);
+    $$("[data-i18n-html]").forEach(el=>EN_CACHE[el.dataset.i18nHtml]=el.innerHTML);
+  }
+
+  function applyLang(lang){
+    const html=document.documentElement;
+    const isAr = lang==="ar";
+    html.lang = isAr?"ar":"en";
+    html.dir  = isAr?"rtl":"ltr";
+    const dict = isAr ? I18N.ar : EN_CACHE;
+    $$("[data-i18n]").forEach(el=>{ const k=el.dataset.i18n; if(dict[k]!=null) el.innerHTML=dict[k]; });
+    $$("[data-i18n-html]").forEach(el=>{ const k=el.dataset.i18nHtml; if(dict[k]!=null) el.innerHTML=dict[k]; });
+    document.getElementById("langToggle").textContent = isAr ? "English" : "العربية";
+    try{ localStorage.setItem("nova_lang",lang); }catch(e){}
+  }
+
+  /* ============ Init ============ */
+  cacheEnglish();
+  let saved="en"; try{ saved=localStorage.getItem("nova_lang")||"en"; }catch(e){}
+  if(saved==="ar") applyLang("ar");
+
+  document.getElementById("langToggle").addEventListener("click",()=>{
+    applyLang(document.documentElement.dir==="rtl"?"en":"ar");
+  });
+
+  /* Mobile menu */
+  const menuBtn=document.getElementById("menuBtn"), navLinks=document.getElementById("navLinks");
+  menuBtn.addEventListener("click",()=>{
+    const open=navLinks.classList.toggle("show");
+    menuBtn.setAttribute("aria-expanded",open);
+  });
+  $$("#navLinks a").forEach(a=>a.addEventListener("click",()=>navLinks.classList.remove("show")));
+
+  /* FAQ accordion */
+  $$(".faq-q").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const item=btn.closest(".faq-item");
+      const a=item.querySelector(".faq-a");
+      const open=item.classList.toggle("open");
+      btn.setAttribute("aria-expanded",open);
+      a.style.maxHeight = open ? a.scrollHeight+"px" : 0;
+    });
+  });
+
+  /* Newsletter (demo) */
+  document.getElementById("newsletter").addEventListener("submit",e=>{
+    e.preventDefault();
+    const input=document.getElementById("emailInput"), msg=document.getElementById("formMsg");
+    const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+    const ar=document.documentElement.dir==="rtl";
+    if(!ok){ msg.style.color="#f87171"; msg.textContent=ar?"يرجى إدخال بريد إلكتروني صحيح.":"Please enter a valid email."; return; }
+    msg.style.color="var(--accent)";
+    msg.textContent=ar?"شكراً! سنتواصل معك قريباً. 🎉":"Thanks! We'll be in touch shortly. 🎉";
+    input.value="";
+  });
+
+  /* Reveal on scroll */
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
+  },{threshold:.12});
+  $$(".reveal").forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>
