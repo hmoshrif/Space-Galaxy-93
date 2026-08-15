@@ -1,29 +1,43 @@
-# Nova AI — Commercial Landing Page Template
+# Startup AI Launchpad — منصة إطلاق الشركات الناشئة
 
-A production-ready, single-file marketing site for an AI startup, built to be **launch-ready**.
+نسخة احترافية جاهزة للإطلاق التجاري من منصة **Startup AI Launchpad** — أداة عربية تفاعلية تقود المؤسّس من الفكرة إلى الإطلاق عبر **7 مراحل و214 مهمة موجهة**. ملف واحد (`index.html`) بلا خطوة بناء.
 
-## ✨ What's included
-- **Bilingual** — English (LTR) + Arabic (RTL) with a one-click language toggle (preference saved in `localStorage`).
-- **Full commercial sections** — Hero, trust logos, features, how-it-works, live-stats band, **transparent pricing (3 tiers)**, testimonials, FAQ accordion, email capture, and a footer with **legal links** (Privacy, Terms, Security, Status).
-- **SEO ready** — `<title>`, meta description, canonical, **Open Graph + Twitter cards**, JSON-LD structured data, and an inline SVG favicon.
-- **Responsive** — mobile-first layout with a hamburger menu.
-- **Accessible** — semantic landmarks, ARIA states, visible focus rings, and reduced-motion support.
-- **Zero build step** — everything is in `index.html` (only Google Fonts loaded externally).
+## ✨ ما الذي تتضمّنه هذه النسخة
 
-## 🚀 Deploy
-Open `index.html` locally, or host it on any static host:
-- **Netlify / Vercel / Cloudflare Pages** — drag-and-drop or connect this repo.
-- **GitHub Pages** — enable Pages on this branch, root folder.
+**الأداة التفاعلية الأساسية (محفوظة بالكامل):**
+- **214 مهمة موجهة** عبر 7 مراحل: الاكتشاف، القيمة، النموذج، التسويق، المالية، الإطلاق، العرض.
+- **لوحة مهام تفاعلية** — بحث فوري، فلترة حسب المرحلة، فتح/طي المراحل.
+- **مربع إجابات المؤسّس** — اكتب إجابتك ودليلها ومستوى ثقتك لكل مهمة.
+- **تتبّع تقدّم** — علّم المهام المكتملة وشاهد نسبة كل مرحلة، مع **حفظ محلي** (localStorage).
+- **درج تفاصيل المهمة** — طريقة التنفيذ + المخرج العملي + نسخ المهمة/أمر الذكاء الاصطناعي.
 
-## 🔧 Before going live (checklist)
-- [ ] Replace brand name, copy, and the `og:image` at `og-image.png`.
-- [ ] Point `#`/`#pricing` CTAs to your real signup / checkout flow.
-- [ ] Wire the newsletter form to your provider (Mailchimp, ConvertKit, HubSpot, etc.).
-- [ ] Add a real **Privacy Policy**, **Terms of Service**, and **AI data-usage** page.
-- [ ] Add analytics (Plausible / GA4) and a cookie/consent notice if targeting the EU.
-- [ ] Buy a custom domain and enable HTTPS.
-- [ ] Run Lighthouse and confirm performance/SEO/accessibility scores.
+**إضافات الإطلاق التجاري (جديدة):**
+- قسم **«كيف يعمل»** بثلاث خطوات واضحة.
+- قسم **تسعير** شفّاف (مجاني / احترافي / فِرق) يوضّح الفرق بين النسخة المستقلة والسحابية.
+- **شهادات** عملاء و**أسئلة شائعة (FAQ)** تفاعلية.
+- **نموذج قائمة انتظار** (waitlist) لالتقاط البريد.
+- **Footer قانوني** (الخصوصية، الشروط، استخدام البيانات) وروابط تواصل.
+- **SEO كامل**: عنوان ووصف، Open Graph + Twitter cards، بيانات منظّمة (JSON-LD)، وأيقونة favicon.
+- هوية بصرية مطوّرة مبنية على ألوان العلامة (navy / teal / amber)، متجاوبة بالكامل، وإمكانية وصول (a11y).
 
-## 🎨 Customize
-- **Colors / fonts** — edit the CSS variables in the `:root` block at the top of `index.html`.
-- **Copy** — English lives in the HTML; the Arabic translations live in the `I18N.ar` object in the `<script>` at the bottom.
+## 🚀 النشر
+افتح `index.html` محلياً، أو استضفه على أي مضيف ثابت:
+- **Netlify / Vercel / Cloudflare Pages** — بالسحب والإفلات أو بربط المستودع.
+- **GitHub Pages** — فعّل Pages على هذا الفرع من المجلد الجذر.
+
+## 🔧 قبل الإطلاق (قائمة تحقّق)
+- [ ] اربط أزرار «النسخة السحابية» و«جرّب مجاناً» بمسار التسجيل/الدفع الحقيقي.
+- [ ] اربط نموذج قائمة الانتظار بمزوّدك (Mailchimp / ConvertKit / HubSpot…).
+- [ ] أنشئ صفحات **سياسة الخصوصية** و**شروط الاستخدام** و**استخدام البيانات والذكاء الاصطناعي**.
+- [ ] عدّل أسعار خطط التسعير وفق نموذج عملك الفعلي.
+- [ ] استبدل الشهادات التوضيحية بشهادات حقيقية بأسماء وصور.
+- [ ] أضف تحليلات (Plausible / GA4) وإشعار كوكيز إن استهدفت أوروبا.
+- [ ] جهّز دومين مخصّص وفعّل HTTPS، وأضف صورة `og-image.png`.
+- [ ] شغّل Lighthouse وتأكّد من درجات الأداء/SEO/الوصول.
+
+## 🎨 التخصيص
+- **الألوان/الخطوط:** متغيّرات CSS في كتلة `:root` أعلى `index.html`.
+- **بيانات المهام (214 مهمة):** كائن `pageData` داخل `<script>` بالأسفل — كل مهمة تحتوي: النص، طريقة التنفيذ، المخرج، السؤال، معايير القبول، ونوع الدليل.
+- **الأقسام التسويقية:** ضمن جسم الصفحة مباشرةً (Hero، التسعير، الشهادات، FAQ…).
+
+> ملاحظة: التبعية الخارجية الوحيدة هي خطوط Google؛ كل شيء آخر مضمّن داخل الملف.
