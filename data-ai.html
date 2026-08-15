@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>استخدام البيانات والذكاء الاصطناعي — Startup AI Launchpad</title>
+  <meta name="description" content="كيف تعالج منصة Startup AI Launchpad بياناتك في سياق ميزات الذكاء الاصطناعي." />
+  <meta name="robots" content="index,follow" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23081a35'/%3E%3Cpath d='M16 5l3 8h-6l3-8z' fill='%2300b99e'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --navy:#081a35;--ink:#0a1b33;--muted:#5b6a80;--muted-2:#8592a6;
+      --teal:#00b99e;--teal-dark:#00897a;--amber:#f4b63f;
+      --paper:#f7f9fc;--soft:#eef3f9;--card:#ffffff;--line:#e2e9f2;--line-2:#d3deec;
+      --grad:linear-gradient(135deg,var(--teal),var(--navy));--radius:14px;color-scheme:light;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Tajawal","Segoe UI",Tahoma,Arial,sans-serif;background:var(--paper);
+      color:var(--ink);line-height:1.95;-webkit-font-smoothing:antialiased}
+    a{color:var(--teal-dark);text-decoration:none}
+    a:hover{text-decoration:underline}
+    h1,h2,h3{font-family:"Cairo","Tajawal",sans-serif;color:var(--navy);line-height:1.35;margin:0}
+    .wrap{width:min(860px,calc(100% - 34px));margin-inline:auto}
+    .topbar{position:sticky;top:0;z-index:20;background:rgba(247,249,252,.85);backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--line)}
+    .topbar-inner{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:inline-flex;align-items:center;gap:11px;font-family:"Cairo",sans-serif;font-weight:900;
+      color:var(--navy);font-size:17px}
+    .brand-mark{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--grad);
+      color:#fff;font-size:12px;font-weight:800}
+    .back{font-weight:700;font-size:14px;border:1px solid var(--line-2);border-radius:10px;padding:9px 15px;
+      color:var(--ink);background:var(--card)}
+    .back:hover{text-decoration:none;border-color:var(--teal);color:var(--teal-dark)}
+    .hero{padding:52px 0 8px}
+    .kicker{font-family:"Cairo",sans-serif;font-size:12.5px;font-weight:800;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--teal-dark);margin:0 0 10px}
+    .hero h1{font-size:clamp(28px,4.4vw,40px)}
+    .updated{color:var(--muted-2);font-size:14px;margin-top:10px}
+    .note{background:rgba(244,182,63,.12);border:1px solid rgba(244,182,63,.4);border-radius:12px;
+      padding:14px 18px;margin:26px 0 8px;font-size:14px;color:#7a5a12}
+    .note strong{color:#6b4e0a}
+    main{padding:16px 0 40px}
+    section{padding:22px 0;border-bottom:1px solid var(--line)}
+    section:last-child{border-bottom:none}
+    h2{font-size:20px;margin-bottom:10px}
+    h2 .n{color:var(--teal);font-family:"Cairo",sans-serif}
+    p{margin:0 0 12px}
+    ul{margin:0 0 12px;padding-inline-start:22px;display:grid;gap:7px}
+    li{color:var(--ink)}
+    .ph{background:var(--soft);border:1px dashed var(--line-2);border-radius:6px;padding:1px 8px;
+      font-family:"Cairo",sans-serif;font-weight:700;color:var(--teal-dark);font-size:.92em}
+    .toc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;margin:20px 0}
+    .toc h3{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:12px}
+    .toc ol{margin:0;padding-inline-start:20px;display:grid;gap:6px}
+    .toc a{color:var(--ink);font-size:14.5px}
+    .related{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+    .related a{border:1px solid var(--line-2);border-radius:10px;padding:9px 15px;font-size:14px;
+      color:var(--ink);background:var(--card);font-weight:600}
+    .related a:hover{text-decoration:none;border-color:var(--teal);color:var(--teal-dark)}
+    footer{background:var(--soft);border-top:1px solid var(--line);padding:30px 0;color:var(--muted-2);font-size:13.5px}
+    .foot-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+    :focus-visible{outline:3px solid #1b75ff;outline-offset:3px;border-radius:6px}
+    @media (max-width:560px){.foot-inner{flex-direction:column;text-align:center}}
+  </style>
+
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>Startup Launchpad</span></a>
+      <a class="back" href="index.html">← العودة للموقع</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="hero">
+      <p class="kicker">DATA & AI USAGE</p>
+      <h1>استخدام البيانات والذكاء الاصطناعي</h1>
+      <p class="updated">آخر تحديث: 15 أغسطس 2026</p>
+    </div>
+
+    <div class="note">
+      <strong>تنبيه:</strong> هذه وثيقة نموذجية للاسترشاد فقط وليست استشارة قانونية. استبدل الحقول بين
+      الأقواس <span class="ph">[ ]</span> ببياناتك، وراجع النص مع مختص قانوني قبل اعتماده رسمياً.
+    </div>
+
+    <div class="toc">
+      <h3>المحتويات</h3>
+      <ol>
+        <li><a href="#intro">مقدمة</a></li><li><a href="#how">كيف يُستخدم الذكاء الاصطناعي</a></li><li><a href="#sent">البيانات المُرسلة لمزوّدي الذكاء الاصطناعي (النسخة السحابية)</a></li><li><a href="#training">عدم استخدام بياناتك لتدريب نماذج عامة</a></li><li><a href="#accuracy">دقة المخرجات وحدودها</a></li><li><a href="#control">تحكّمك في بياناتك</a></li><li><a href="#providers">مزوّدو الطرف الثالث</a></li><li><a href="#contact">التواصل</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <main>
+    <div class="wrap">
+      <section id="intro">
+<h2><span class="n">1.</span> مقدمة</h2>
+<p>تشرح هذه الصفحة كيف تعالج المنصة بياناتك في سياق ميزات الذكاء الاصطناعي، وهي مكمّلة لـ<a href='privacy.html'>سياسة الخصوصية</a>.</p>
+</section>
+<section id="how">
+<h2><span class="n">2.</span> كيف يُستخدم الذكاء الاصطناعي</h2>
+<p>تساعدك ميزات الذكاء الاصطناعي على صياغة إجاباتك وتحليل خطواتك واقتراح مخرجات لكل مهمة. في النسخة المجانية تُنسخ «أوامر الاستدعاء» لتستخدمها في أداة الذكاء الاصطناعي التي تختارها، دون إرسال بياناتك إلى خوادمنا.</p>
+</section>
+<section id="sent">
+<h2><span class="n">3.</span> البيانات المُرسلة لمزوّدي الذكاء الاصطناعي (النسخة السحابية)</h2>
+<p>عند استخدام الإرشاد الذكي المدمج في النسخة السحابية، قد يُرسل النص الذي تكتبه إلى مزوّد نماذج لغوية طرف ثالث لمعالجته وإرجاع النتيجة. نرسل الحد الأدنى اللازم فقط لتنفيذ طلبك.</p>
+</section>
+<section id="training">
+<h2><span class="n">4.</span> عدم استخدام بياناتك لتدريب نماذج عامة</h2>
+<p>لا نستخدم إجاباتك أو محتواك لتدريب نماذج ذكاء اصطناعي عامة، ونختار مزوّدين يلتزمون بعدم استخدام بيانات العملاء في التدريب. تبقى بياناتك خاصة بمساحة عملك.</p>
+</section>
+<section id="accuracy">
+<h2><span class="n">5.</span> دقة المخرجات وحدودها</h2>
+<p>مخرجات الذكاء الاصطناعي قد تحتوي أخطاء أو معلومات غير دقيقة، وهي اقتراحات للاسترشاد لا حقائق مؤكدة. <strong>راجع دائماً المخرجات قبل اتخاذ أي قرار</strong>، ولا تعتمد عليها كاستشارة قانونية أو مالية.</p>
+</section>
+<section id="control">
+<h2><span class="n">6.</span> تحكّمك في بياناتك</h2>
+<p>يمكنك في النسخة المجانية حذف كل بياناتك عبر «تصفير التقدّم». وفي النسخة السحابية يمكنك حذف مخرجاتك أو حسابك بالتواصل معنا عبر <span class="ph">[البريد الإلكتروني للتواصل]</span>.</p>
+</section>
+<section id="providers">
+<h2><span class="n">7.</span> مزوّدو الطرف الثالث</h2>
+<p>نستعين بمزوّدي خدمات ذكاء اصطناعي واستضافة موثوقين. تخضع معالجتهم لبياناتك لسياسات الخصوصية الخاصة بهم إضافةً إلى التزاماتنا التعاقدية معهم بحماية بياناتك.</p>
+</section>
+<section id="contact">
+<h2><span class="n">8.</span> التواصل</h2>
+<p>لأي استفسار حول البيانات والذكاء الاصطناعي تواصل معنا عبر <span class="ph">[البريد الإلكتروني للتواصل]</span>.</p>
+</section>
+
+      <div class="related">
+        <a href="privacy.html">سياسة الخصوصية</a><a href="terms.html">شروط الاستخدام</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap foot-inner">
+      <span>© 2026 <span class="ph">[اسم الجهة]</span> — Startup AI Launchpad. جميع الحقوق محفوظة.</span>
+      <span>للتواصل: <span class="ph">[البريد الإلكتروني]</span></span>
+    </div>
+  </footer>
+</body>
+</html>
